@@ -2446,15 +2446,15 @@ h1, h2, h3, h4, .logo-text, .message-typography {
     }
 
     body.print-size-a4 .thiep-bottom-row {
-        bottom: 22mm !important;
-        right: 20mm !important;
+        bottom: 35mm !important;
+        right: 32mm !important;
         left: auto !important;
         width: auto !important;
     }
 
     body.print-size-a5 .thiep-bottom-row {
-        bottom: 12mm !important;
-        right: 10mm !important;
+        bottom: 24mm !important;
+        right: 22mm !important;
         left: auto !important;
         width: auto !important;
     }
@@ -2992,8 +2992,8 @@ h1, h2, h3, h4, .logo-text, .message-typography {
 
 .printable-thiep-container .thiep-bottom-row {
     position: absolute !important;
-    bottom: 22mm !important;
-    right: 20mm !important;
+    bottom: 35mm !important;
+    right: 32mm !important;
     display: flex !important;
     justify-content: flex-end !important;
     align-items: flex-end !important;
