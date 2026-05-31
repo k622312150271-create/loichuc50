@@ -3098,9 +3098,7 @@ h1, h2, h3, h4, .logo-text, .message-typography {
 
     /* Force empty color template container to take up the full print viewport */
     body.print-template-only .printable-template-only-container {
-        display: flex !important;
-        align-items: center !important;
-        justify-content: center !important;
+        display: block !important;
         position: absolute !important;
         top: 0 !important;
         left: 0 !important;
@@ -3110,13 +3108,17 @@ h1, h2, h3, h4, .logo-text, .message-typography {
         padding: 0 !important;
         z-index: 999999 !important;
         background-color: #ffffff !important;
+        overflow: hidden !important; /* Crops the outer 3% bleed margin */
     }
 
-    /* Stretch the empty template image to touch the exact edges of the A4/A5 sheet */
+    /* Stretch and bleed the empty template image to touch the exact edges of the sheet and cut off outer margins */
     body.print-template-only .printable-template-only-container img {
-        width: 100% !important;
-        height: 100% !important;
-        object-fit: fill !important; /* Bleeds and snaps perfectly to the paper boundary */
+        width: 106% !important;
+        height: 106% !important;
+        position: absolute !important;
+        top: -3% !important;
+        left: -3% !important;
+        object-fit: fill !important; /* Bleeds and snaps perfectly to the page boundary */
         margin: 0 !important;
         padding: 0 !important;
     }

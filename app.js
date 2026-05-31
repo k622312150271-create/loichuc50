@@ -648,10 +648,12 @@ function clearTranscript() {
 // --- Empty Template Printing System ---
 appState.selectedTemplateToPrint = 'eden';
 appState.selectedTemplateSize = 'a4';
+appState.selectedTemplateOrientation = 'landscape';
 
 function openPrintTemplateModal() {
     appState.selectedTemplateToPrint = 'eden';
     appState.selectedTemplateSize = 'a4';
+    appState.selectedTemplateOrientation = 'landscape';
     
     // Reset active highlights
     document.querySelectorAll('.template-choice-card').forEach(c => {
@@ -666,6 +668,12 @@ function openPrintTemplateModal() {
         c.style.background = 'transparent';
         c.querySelector('strong').style.color = 'var(--color-text-brown)';
     });
+    document.querySelectorAll('.template-orientation-card').forEach(c => {
+        c.classList.remove('active');
+        c.style.borderColor = 'rgba(74, 59, 50, 0.15)';
+        c.style.background = 'transparent';
+        c.querySelector('strong').style.color = 'var(--color-text-brown)';
+    });
     
     // Highlight defaults
     const choices = document.querySelectorAll('.template-choice-card');
@@ -674,6 +682,13 @@ function openPrintTemplateModal() {
         choices[0].style.borderColor = 'var(--color-gold-dark)';
         choices[0].style.background = 'rgba(214,175,55,0.03)';
         choices[0].querySelector('strong').style.color = 'var(--color-gold-dark)';
+    }
+    const orientations = document.querySelectorAll('.template-orientation-card');
+    if (orientations.length > 0) {
+        orientations[0].classList.add('active');
+        orientations[0].style.borderColor = 'var(--color-gold-dark)';
+        orientations[0].style.background = 'rgba(214,175,55,0.03)';
+        orientations[0].querySelector('strong').style.color = 'var(--color-gold-dark)';
     }
     const sizes = document.querySelectorAll('.template-size-card');
     if (sizes.length > 0) {
@@ -722,6 +737,22 @@ function selectTemplateToPrint(templateName, element) {
     }
 }
 
+function selectTemplateOrientation(orientation, element) {
+    appState.selectedTemplateOrientation = orientation;
+    document.querySelectorAll('.template-orientation-card').forEach(c => {
+        c.classList.remove('active');
+        c.style.borderColor = 'rgba(74, 59, 50, 0.15)';
+        c.style.background = 'transparent';
+        c.querySelector('strong').style.color = 'var(--color-text-brown)';
+    });
+    if (element) {
+        element.classList.add('active');
+        element.style.borderColor = 'var(--color-gold-dark)';
+        element.style.background = 'rgba(214,175,55,0.03)';
+        element.querySelector('strong').style.color = 'var(--color-gold-dark)';
+    }
+}
+
 function selectTemplateSize(sizeName, element) {
     appState.selectedTemplateSize = sizeName;
     document.querySelectorAll('.template-size-card').forEach(c => {
@@ -741,11 +772,22 @@ function selectTemplateSize(sizeName, element) {
 function downloadSelectedTemplate() {
     const templateName = appState.selectedTemplateToPrint || 'eden';
     const sizeName = appState.selectedTemplateSize || 'a4';
+    const orientation = appState.selectedTemplateOrientation || 'landscape';
     
-    // Create offscreen container styled precisely for borderless PDF page export
+    // Determine sheet dimensions in mm
+    let widthMm, heightMm;
+    if (sizeName === 'a4') {
+        widthMm = orientation === 'landscape' ? 297 : 210;
+        heightMm = orientation === 'landscape' ? 210 : 297;
+    } else { // a5
+        widthMm = orientation === 'landscape' ? 210 : 148;
+        heightMm = orientation === 'landscape' ? 148 : 210;
+    }
+    
+    // Create offscreen container styled precisely for borderless PDF page export with bleed cropping
     const card = document.createElement('div');
-    card.style.width = sizeName === 'a4' ? '297mm' : '210mm';
-    card.style.height = sizeName === 'a4' ? '210mm' : '148mm';
+    card.style.width = `${widthMm}mm`;
+    card.style.height = `${heightMm}mm`;
     card.style.margin = '0';
     card.style.padding = '0';
     card.style.position = 'absolute';
@@ -755,20 +797,30 @@ function downloadSelectedTemplate() {
     card.style.backgroundColor = '#ffffff';
     card.style.overflow = 'hidden';
     
-    // Image stretched to fill the full bounds with object-fit: fill to avoid margins
+    // Create image with a 6% bleed scaling to push white borders outside the page boundaries
     card.innerHTML = `
-        <img src="${templateName}.png" style="width: 100%; height: 100%; object-fit: fill; display: block; margin: 0; padding: 0;">
+        <img src="${templateName}.png" style="
+            width: 106% !important; 
+            height: 106% !important; 
+            position: absolute !important;
+            top: -3% !important; 
+            left: -3% !important; 
+            object-fit: fill !important; 
+            display: block; 
+            margin: 0; 
+            padding: 0;
+        ">
     `;
     
     document.body.appendChild(card);
     
-    // Configure html2pdf for zero margin landscape PDF matching paper size A4/A5
+    // Configure html2pdf for zero margin PDF matching paper size and orientation
     const opt = {
         margin:       0,
-        filename:     `Khung_Mau_${templateName.toUpperCase()}_${sizeName.toUpperCase()}_Sat_Vien.pdf`,
+        filename:     `Khung_Mau_${templateName.toUpperCase()}_${sizeName.toUpperCase()}_${orientation.toUpperCase()}_Sat_Vien.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: sizeName, orientation: 'landscape' }
+        jsPDF:        { unit: 'mm', format: sizeName, orientation: orientation }
     };
     
     if (typeof html2pdf !== 'undefined') {
@@ -790,6 +842,7 @@ function downloadSelectedTemplate() {
 async function printEmptyTemplate() {
     const templateName = appState.selectedTemplateToPrint || 'eden';
     const sizeName = appState.selectedTemplateSize || 'a4';
+    const orientation = appState.selectedTemplateOrientation || 'landscape';
     
     closePrintTemplateModal();
     
@@ -800,10 +853,10 @@ async function printEmptyTemplate() {
     // Add print orientation and empty template classes to body
     document.body.classList.remove('print-size-a4', 'print-size-a5', 'print-orientation-landscape', 'print-orientation-portrait', 'print-template-only');
     document.body.classList.add(`print-size-${sizeName}`);
-    document.body.classList.add('print-orientation-landscape');
+    document.body.classList.add(`print-orientation-${orientation}`);
     document.body.classList.add('print-template-only');
     
-    // Inject dynamic @page style to force landscape and zero margins
+    // Inject dynamic @page style to force orientation and zero margins
     let printStyleNode = document.getElementById('dynamic-print-page-style');
     if (!printStyleNode) {
         printStyleNode = document.createElement('style');
@@ -811,11 +864,8 @@ async function printEmptyTemplate() {
         document.head.appendChild(printStyleNode);
     }
     
-    if (sizeName === 'a4') {
-        printStyleNode.innerHTML = `@media print { @page { size: A4 landscape; margin: 0; } }`;
-    } else {
-        printStyleNode.innerHTML = `@media print { @page { size: A5 landscape; margin: 0; } }`;
-    }
+    const sizeParam = sizeName.toUpperCase();
+    printStyleNode.innerHTML = `@media print { @page { size: ${sizeParam} ${orientation}; margin: 0; } }`;
     
     await waitForImagesToLoad(container);
     

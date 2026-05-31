@@ -980,10 +980,27 @@
                     </div>
                 </div>
 
-                <!-- Section 2: Select Size -->
+                <!-- Section 2: Select Orientation -->
                 <div>
                     <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--color-text-brown); margin-bottom: 8px;">
-                        2. Chọn Khổ Giấy In
+                        2. Chọn Hướng Giấy
+                    </h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="template-orientation-card active" onclick="selectTemplateOrientation('landscape', this)" style="border: 2px solid var(--color-gold-dark); background: rgba(214,175,55,0.03); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <strong style="font-size: 0.95rem; color: var(--color-gold-dark); display: block;">Ngang (Landscape)</strong>
+                            <span style="font-size: 0.72rem; opacity: 0.8; display: block; margin-top: 2px;">Phù hợp trưng bày ngang</span>
+                        </div>
+                        <div class="template-orientation-card" onclick="selectTemplateOrientation('portrait', this)" style="border: 1px solid rgba(74, 59, 50, 0.15); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <strong style="font-size: 0.95rem; color: var(--color-text-brown); display: block;">Dọc (Portrait)</strong>
+                            <span style="font-size: 0.72rem; opacity: 0.8; display: block; margin-top: 2px;">Phù hợp trưng bày đứng</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 3: Select Size -->
+                <div>
+                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--color-text-brown); margin-bottom: 8px;">
+                        3. Chọn Khổ Giấy In
                     </h4>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                         <div class="template-size-card active" onclick="selectTemplateSize('a4', this)" style="border: 2px solid var(--color-gold-dark); background: rgba(214,175,55,0.03); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
