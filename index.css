@@ -2429,6 +2429,109 @@ h1, h2, h3, h4, .logo-text, .message-typography {
         gap: 15px !important;
     }
 
+    /* LANDSCAPE OVERRIDES FOR EDEN GARDEN Pre-printed template alignment */
+    body.print-theme-eden-landscape.print-size-a4 .thiep-card {
+        width: 277mm !important;
+        height: 190mm !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        padding: 25mm 20mm !important;
+        gap: 30px !important;
+    }
+
+    body.print-theme-eden-landscape.print-size-a5 .thiep-card {
+        width: 194mm !important;
+        height: 132mm !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        padding: 12mm 10mm !important;
+        gap: 15px !important;
+    }
+
+    /* Left Side: Handwritten text (Transparent & borderless inside the single white card) */
+    body.print-theme-eden-landscape .thiep-body {
+        flex: 1.15 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        box-sizing: border-box !important;
+        background: transparent !important;
+        border: none !important;
+        border-radius: 0 !important;
+        padding: 10px !important;
+        height: 100% !important;
+    }
+
+    body.print-theme-eden-landscape .thiep-message-box {
+        width: 100% !important;
+        height: 100% !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+    }
+
+    body.print-theme-eden-landscape .thiep-message-text {
+        font-family: 'Playfair Display', serif !important;
+        font-size: 1.35rem !important; /* Made to fit as large as possible! */
+        line-height: 1.7 !important;
+        text-align: center !important;
+        color: #4A3B32 !important;
+    }
+
+    /* Right Side: Photo box (Transparent & borderless inside the single white card) */
+    body.print-theme-eden-landscape .thiep-image-box {
+        flex: 0.85 !important;
+        height: 100% !important;
+        box-sizing: border-box !important;
+        background: transparent !important;
+        border-radius: 0 !important;
+        border: none !important;
+        padding: 0 !important;
+        overflow: hidden !important;
+    }
+
+    body.print-theme-eden-landscape .thiep-img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+        border-radius: 4px !important; /* Gentle clean standard framing */
+    }
+
+    /* Bottom row absolute positioning to overlay beautifully */
+    body.print-theme-eden-landscape .thiep-bottom-row {
+        position: absolute !important;
+        bottom: 22mm !important;
+        left: 20mm !important;
+        width: calc(100% - 40mm) !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: flex-end !important;
+        z-index: 20 !important;
+    }
+
+    /* OVERPRINT / CONTENT-ONLY MODE (Hides borders, backgrounds & decors to match pre-printed sheets) */
+    body.print-content-only .theme-ornaments,
+    body.print-content-only .thiep-card {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+    
+    body.print-content-only .thiep-header,
+    body.print-content-only .thiep-bottom-row {
+        display: none !important; /* Hide to prevent printing over the card header/footer decors */
+    }
+    
+    body.print-content-only .thiep-body {
+        border: none !important;
+        background: transparent !important;
+    }
+    
+    body.print-content-only .thiep-image-box {
+        border: none !important;
+        background: transparent !important;
+    }
+
     /* ----------------------------------------- */
     /* THEME 1: BUTTERFLY (Bướm Tinh Khôi)       */
     /* ----------------------------------------- */
@@ -2441,9 +2544,9 @@ h1, h2, h3, h4, .logo-text, .message-typography {
     /* THEME 2: EDEN (Vườn Địa Đàng)             */
     /* ----------------------------------------- */
     .thiep-card.theme-eden {
-        border: 5px solid #27ae60 !important; /* Soft botanical border */
-        outline: 1.5px solid #aa7c11 !important;
-        outline-offset: -6px !important;
+        border: 1.5px solid #AA7C11 !important; /* Elegant thin gold border line */
+        box-shadow: none !important;
+        outline: none !important;
     }
 
     /* ----------------------------------------- */

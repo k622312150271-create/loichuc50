@@ -1467,11 +1467,22 @@ async function executeKeepsakePrint() {
 async function confirmPrintSize(size) {
     closePrintSizeModal();
     
-    // Remove existing print size classes from body
-    document.body.classList.remove('print-size-a4', 'print-size-a5');
+    // Remove existing print size and theme classes from body
+    document.body.classList.remove('print-size-a4', 'print-size-a5', 'print-theme-eden-landscape', 'print-content-only');
     
     // Add the selected size class
     document.body.classList.add(`print-size-${size}`);
+    
+    // Add the print theme landscape class if Eden is selected!
+    if (appState.selectedPrintTheme === 'eden') {
+        document.body.classList.add('print-theme-eden-landscape');
+    }
+    
+    // Add content-only class if checked
+    const printContentOnlyChecked = document.getElementById('checkbox-print-content-only')?.checked;
+    if (printContentOnlyChecked) {
+        document.body.classList.add('print-content-only');
+    }
     
     // Inject dynamic @page size style to enforce correct paper format in print dialog
     let printStyleNode = document.getElementById('dynamic-print-page-style');
@@ -1481,10 +1492,20 @@ async function confirmPrintSize(size) {
         document.head.appendChild(printStyleNode);
     }
     
-    if (size === 'a4') {
-        printStyleNode.innerHTML = `@media print { @page { size: A4 portrait; margin: 10mm; } }`;
-    } else if (size === 'a5') {
-        printStyleNode.innerHTML = `@media print { @page { size: A5 portrait; margin: 8mm; } }`;
+    if (appState.selectedPrintTheme === 'eden') {
+        // Landscape orientation for Eden Garden!
+        if (size === 'a4') {
+            printStyleNode.innerHTML = `@media print { @page { size: A4 landscape; margin: 10mm; } }`;
+        } else if (size === 'a5') {
+            printStyleNode.innerHTML = `@media print { @page { size: A5 landscape; margin: 8mm; } }`;
+        }
+    } else {
+        // Portrait orientation for other themes
+        if (size === 'a4') {
+            printStyleNode.innerHTML = `@media print { @page { size: A4 portrait; margin: 10mm; } }`;
+        } else if (size === 'a5') {
+            printStyleNode.innerHTML = `@media print { @page { size: A5 portrait; margin: 8mm; } }`;
+        }
     }
     
     // Execute the actual printing
