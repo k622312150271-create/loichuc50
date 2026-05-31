@@ -1889,8 +1889,11 @@ h1, h2, h3, h4, .logo-text, .message-typography {
     border-radius: 16px;
     width: 100%;
     max-width: 600px;
+    max-height: 90vh;
     box-shadow: var(--shadow-premium);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
     animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -1951,6 +1954,8 @@ h1, h2, h3, h4, .logo-text, .message-typography {
 
 .modal-body {
     padding: 24px;
+    overflow-y: auto;
+    flex-grow: 1;
 }
 
 .modal-subtle-hint {

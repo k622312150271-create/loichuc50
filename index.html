@@ -335,6 +335,16 @@
                         <span class="card-card-subtitle">Ghi lại khoảnh khắc</span>
                     </div>
                 </div>
+
+                <div class="action-card tooltip" data-tooltip="Tải & in các khung viền hoa văn màu trống làm phôi giấy in đè" onclick="openPrintTemplateModal()">
+                    <div class="card-icon-container" style="background: rgba(214,175,55,0.1); color: var(--color-gold-dark);">
+                        <span style="font-size: 1.5rem; line-height: 1;">🎨</span>
+                    </div>
+                    <div class="card-meta">
+                        <h4 class="card-card-title" style="color: var(--color-gold-dark);">In khung màu</h4>
+                        <span class="card-card-subtitle">Chuẩn bị phôi giấy</span>
+                    </div>
+                </div>
             </div>
 
             <!-- Floating Preview for Taken Attachments -->
@@ -922,6 +932,84 @@
         </div>
     </div>
 
+    <!-- 11. PRINT EMPTY COLOR TEMPLATE MODAL -->
+    <div id="print-template-modal" class="modal-overlay hidden" onclick="closePrintTemplateModal()">
+        <div class="modal-card luxury-border glass-panel" style="max-width: 580px;" onclick="event.stopPropagation()">
+            <div class="modal-header" style="background: rgba(214,175,55,0.04);">
+                <h3 class="modal-title" style="font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                    <span>🎨 Tải & In Khung Màu Nghệ Thuật</span>
+                </h3>
+                <button class="modal-close-btn" onclick="closePrintTemplateModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" style="padding: 24px; display: flex; flex-direction: column; gap: 20px;">
+                <p style="font-size: 0.85rem; color: var(--color-text-brown); line-height: 1.5; margin: 0; background: rgba(214,175,55,0.05); padding: 12px; border-radius: 8px; border: 1px solid rgba(214,175,55,0.12);">
+                    💡 Bạn có thể in màu khung viền trống này ra trước bằng máy in màu ở ngoài tiệm (hoặc ở nhà), sau đó nhét tờ giấy viền màu đó vào máy in để in chữ & ảnh của bạn đè lên.
+                </p>
+
+                <!-- Section 1: Select Template -->
+                <div>
+                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--color-text-brown); margin-bottom: 8px; margin-top: 0;">
+                        1. Chọn Mẫu Khung Viền Màu
+                    </h4>
+                    <div class="template-selector-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px;">
+                        <div class="template-choice-card active" onclick="selectTemplateToPrint('eden', this)" style="border: 2px solid var(--color-gold-dark); background: rgba(214,175,55,0.03); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <span style="font-size: 1.5rem; display: block; margin-bottom: 4px;">🌿</span>
+                            <strong style="font-size: 0.85rem; color: var(--color-gold-dark); display: block;">Vườn Địa Đàng</strong>
+                        </div>
+                        <div class="template-choice-card" onclick="selectTemplateToPrint('butterfly', this)" style="border: 1px solid rgba(74, 59, 50, 0.15); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <span style="font-size: 1.5rem; display: block; margin-bottom: 4px;">🦋</span>
+                            <strong style="font-size: 0.85rem; color: var(--color-text-brown); display: block;">Bướm Ký Ức</strong>
+                        </div>
+                        <div class="template-choice-card" onclick="selectTemplateToPrint('royal', this)" style="border: 1px solid rgba(74, 59, 50, 0.15); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <span style="font-size: 1.5rem; display: block; margin-bottom: 4px;">⚜️</span>
+                            <strong style="font-size: 0.85rem; color: var(--color-text-brown); display: block;">Hoàng Gia</strong>
+                        </div>
+                        <div class="template-choice-card" onclick="selectTemplateToPrint('minimal', this)" style="border: 1px solid rgba(74, 59, 50, 0.15); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <span style="font-size: 1.5rem; display: block; margin-bottom: 4px;">📐</span>
+                            <strong style="font-size: 0.85rem; color: var(--color-text-brown); display: block;">Tối Giản Gold</strong>
+                        </div>
+                        <div class="template-choice-card" onclick="selectTemplateToPrint('firefly', this)" style="border: 1px solid rgba(74, 59, 50, 0.15); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <span style="font-size: 1.5rem; display: block; margin-bottom: 4px;">✨</span>
+                            <strong style="font-size: 0.85rem; color: var(--color-text-brown); display: block;">Đom Đóm Đêm</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Select Size -->
+                <div>
+                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--color-text-brown); margin-bottom: 8px;">
+                        2. Chọn Khổ Giấy In
+                    </h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <div class="template-size-card active" onclick="selectTemplateSize('a4', this)" style="border: 2px solid var(--color-gold-dark); background: rgba(214,175,55,0.03); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <strong style="font-size: 0.95rem; color: var(--color-gold-dark); display: block;">Khổ A4 (Lớn)</strong>
+                            <span style="font-size: 0.72rem; opacity: 0.8; display: block; margin-top: 2px;">210 x 297 mm</span>
+                        </div>
+                        <div class="template-size-card" onclick="selectTemplateSize('a5', this)" style="border: 1px solid rgba(74, 59, 50, 0.15); padding: 10px; border-radius: 8px; cursor: pointer; text-align: center; transition: all 0.2s;">
+                            <strong style="font-size: 0.95rem; color: var(--color-text-brown); display: block;">Khổ A5 (Nhỏ)</strong>
+                            <span style="font-size: 0.72rem; opacity: 0.8; display: block; margin-top: 2px;">148 x 210 mm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 10px;">
+                    <button class="btn-primary" onclick="printEmptyTemplate()" style="padding: 14px; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; border: none; height: auto;">
+                        <span>🖨️ In Khung Màu</span>
+                    </button>
+                    <button class="btn-secondary" onclick="downloadSelectedTemplate()" style="padding: 14px; font-weight: bold; background: #6c7a89; color: #fff; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; border: none; height: auto;">
+                        <span>📥 Tải Ảnh Khung</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- 10. PRINT SIZE & TEMPLATE SELECTION MODAL -->
     <div id="print-size-modal" class="modal-overlay hidden" onclick="closePrintSizeModal()">
         <div class="modal-card luxury-border glass-panel" style="max-width: 500px;" onclick="event.stopPropagation()">
@@ -1079,6 +1167,9 @@
     <div id="printable-thiep-container" class="printable-thiep-container">
         <!-- Renders a spectacular vintage card when window.print() is fired -->
     </div>
+
+    <!-- Container holding empty template image during full-color printing -->
+    <div id="printable-template-only-container" class="printable-template-only-container"></div>
 
     <!-- Hidden HTML5 Audio Element for Background Music -->
     <audio id="ambient-audio-player" loop></audio>

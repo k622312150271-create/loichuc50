@@ -645,6 +645,136 @@ function clearTranscript() {
     appState.currentMemoryDraft.text = '';
 }
 
+// --- Empty Template Printing System ---
+appState.selectedTemplateToPrint = 'eden';
+appState.selectedTemplateSize = 'a4';
+
+function openPrintTemplateModal() {
+    appState.selectedTemplateToPrint = 'eden';
+    appState.selectedTemplateSize = 'a4';
+    
+    // Reset active highlights
+    document.querySelectorAll('.template-choice-card').forEach(c => {
+        c.classList.remove('active');
+        c.style.borderColor = 'rgba(74, 59, 50, 0.15)';
+        c.style.background = 'transparent';
+        c.querySelector('strong').style.color = 'var(--color-text-brown)';
+    });
+    document.querySelectorAll('.template-size-card').forEach(c => {
+        c.classList.remove('active');
+        c.style.borderColor = 'rgba(74, 59, 50, 0.15)';
+        c.style.background = 'transparent';
+        c.querySelector('strong').style.color = 'var(--color-text-brown)';
+    });
+    
+    // Highlight defaults
+    const choices = document.querySelectorAll('.template-choice-card');
+    if (choices.length > 0) {
+        choices[0].classList.add('active');
+        choices[0].style.borderColor = 'var(--color-gold-dark)';
+        choices[0].style.background = 'rgba(214,175,55,0.03)';
+        choices[0].querySelector('strong').style.color = 'var(--color-gold-dark)';
+    }
+    const sizes = document.querySelectorAll('.template-size-card');
+    if (sizes.length > 0) {
+        sizes[0].classList.add('active');
+        sizes[0].style.borderColor = 'var(--color-gold-dark)';
+        sizes[0].style.background = 'rgba(214,175,55,0.03)';
+        sizes[0].querySelector('strong').style.color = 'var(--color-gold-dark)';
+    }
+    
+    const modal = document.getElementById('print-template-modal');
+    if (modal) modal.classList.remove('hidden');
+}
+
+function closePrintTemplateModal() {
+    const modal = document.getElementById('print-template-modal');
+    if (modal) modal.classList.add('hidden');
+}
+
+function selectTemplateToPrint(templateName, element) {
+    appState.selectedTemplateToPrint = templateName;
+    document.querySelectorAll('.template-choice-card').forEach(c => {
+        c.classList.remove('active');
+        c.style.borderColor = 'rgba(74, 59, 50, 0.15)';
+        c.style.background = 'transparent';
+        c.querySelector('strong').style.color = 'var(--color-text-brown)';
+    });
+    if (element) {
+        element.classList.add('active');
+        element.style.borderColor = 'var(--color-gold-dark)';
+        element.style.background = 'rgba(214,175,55,0.03)';
+        element.querySelector('strong').style.color = 'var(--color-gold-dark)';
+    }
+}
+
+function selectTemplateSize(sizeName, element) {
+    appState.selectedTemplateSize = sizeName;
+    document.querySelectorAll('.template-size-card').forEach(c => {
+        c.classList.remove('active');
+        c.style.borderColor = 'rgba(74, 59, 50, 0.15)';
+        c.style.background = 'transparent';
+        c.querySelector('strong').style.color = 'var(--color-text-brown)';
+    });
+    if (element) {
+        element.classList.add('active');
+        element.style.borderColor = 'var(--color-gold-dark)';
+        element.style.background = 'rgba(214,175,55,0.03)';
+        element.querySelector('strong').style.color = 'var(--color-gold-dark)';
+    }
+}
+
+function downloadSelectedTemplate() {
+    const templateName = appState.selectedTemplateToPrint || 'eden';
+    const link = document.createElement('a');
+    link.href = `templates/${templateName}.png`;
+    link.download = `Mau_Thiep_${templateName.charAt(0).toUpperCase() + templateName.slice(1)}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+
+async function printEmptyTemplate() {
+    const templateName = appState.selectedTemplateToPrint || 'eden';
+    const sizeName = appState.selectedTemplateSize || 'a4';
+    
+    closePrintTemplateModal();
+    
+    const container = document.getElementById('printable-template-only-container');
+    if (!container) return;
+    container.innerHTML = `<img src="templates/${templateName}.png" alt="Empty Template Color">`;
+    
+    // Add print orientation and empty template classes to body
+    document.body.classList.remove('print-size-a4', 'print-size-a5', 'print-orientation-landscape', 'print-orientation-portrait', 'print-template-only');
+    document.body.classList.add(`print-size-${sizeName}`);
+    document.body.classList.add('print-orientation-landscape');
+    document.body.classList.add('print-template-only');
+    
+    // Inject dynamic @page style to force landscape and zero margins
+    let printStyleNode = document.getElementById('dynamic-print-page-style');
+    if (!printStyleNode) {
+        printStyleNode = document.createElement('style');
+        printStyleNode.id = 'dynamic-print-page-style';
+        document.head.appendChild(printStyleNode);
+    }
+    
+    if (sizeName === 'a4') {
+        printStyleNode.innerHTML = `@media print { @page { size: A4 landscape; margin: 0; } }`;
+    } else {
+        printStyleNode.innerHTML = `@media print { @page { size: A5 landscape; margin: 0; } }`;
+    }
+    
+    await waitForImagesToLoad(container);
+    
+    // Trigger direct browser printing
+    window.print();
+    
+    // Cleanup class after print dialog is closed
+    setTimeout(() => {
+        document.body.classList.remove('print-template-only');
+    }, 1000);
+}
+
 // 3. Physical Camera Capture
 async function openCameraModal() {
     const modal = document.getElementById('camera-modal');
