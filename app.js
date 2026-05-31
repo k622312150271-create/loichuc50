@@ -687,6 +687,20 @@ function openPrintTemplateModal() {
     if (modal) modal.classList.remove('hidden');
 }
 
+function openPrintTemplateModalWithTemplate(templateName) {
+    // Open standard modal
+    openPrintTemplateModal();
+    
+    // Programmatically select the template choice card
+    const element = document.querySelector(`.template-choice-card[onclick*="'${templateName}'"]`) || 
+                    document.querySelector(`.template-choice-card[onclick*="\\"${templateName}\\""]`);
+    if (element) {
+        selectTemplateToPrint(templateName, element);
+    } else {
+        appState.selectedTemplateToPrint = templateName;
+    }
+}
+
 function closePrintTemplateModal() {
     const modal = document.getElementById('print-template-modal');
     if (modal) modal.classList.add('hidden');
@@ -726,12 +740,51 @@ function selectTemplateSize(sizeName, element) {
 
 function downloadSelectedTemplate() {
     const templateName = appState.selectedTemplateToPrint || 'eden';
-    const link = document.createElement('a');
-    link.href = `${templateName}.png`;
-    link.download = `Mau_Thiep_${templateName.charAt(0).toUpperCase() + templateName.slice(1)}.png`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    const sizeName = appState.selectedTemplateSize || 'a4';
+    
+    // Create offscreen container styled precisely for borderless PDF page export
+    const card = document.createElement('div');
+    card.style.width = sizeName === 'a4' ? '297mm' : '210mm';
+    card.style.height = sizeName === 'a4' ? '210mm' : '148mm';
+    card.style.margin = '0';
+    card.style.padding = '0';
+    card.style.position = 'absolute';
+    card.style.top = '-9999px';
+    card.style.left = '-9999px';
+    card.style.boxSizing = 'border-box';
+    card.style.backgroundColor = '#ffffff';
+    card.style.overflow = 'hidden';
+    
+    // Image stretched to fill the full bounds with object-fit: fill to avoid margins
+    card.innerHTML = `
+        <img src="${templateName}.png" style="width: 100%; height: 100%; object-fit: fill; display: block; margin: 0; padding: 0;">
+    `;
+    
+    document.body.appendChild(card);
+    
+    // Configure html2pdf for zero margin landscape PDF matching paper size A4/A5
+    const opt = {
+        margin:       0,
+        filename:     `Khung_Mau_${templateName.toUpperCase()}_${sizeName.toUpperCase()}_Sat_Vien.pdf`,
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: sizeName, orientation: 'landscape' }
+    };
+    
+    if (typeof html2pdf !== 'undefined') {
+        html2pdf().set(opt).from(card).save().then(() => {
+            document.body.removeChild(card);
+        });
+    } else {
+        // Fallback to downloading raw PNG
+        const link = document.createElement('a');
+        link.href = `${templateName}.png`;
+        link.download = `Mau_Thiep_${templateName.charAt(0).toUpperCase() + templateName.slice(1)}_Goc.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        document.body.removeChild(card);
+    }
 }
 
 async function printEmptyTemplate() {

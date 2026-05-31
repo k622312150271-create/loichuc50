@@ -3084,3 +3084,40 @@ h1, h2, h3, h4, .logo-text, .message-typography {
     font-size: 1.85rem !important;
     line-height: 1.9 !important;
 }
+
+/* Hide the empty template container in normal web view */
+.printable-template-only-container {
+    display: none;
+}
+
+@media print {
+    /* Hide the normal letter printable when printing ONLY the empty background template */
+    body.print-template-only .printable-thiep-container {
+        display: none !important;
+    }
+
+    /* Force empty color template container to take up the full print viewport */
+    body.print-template-only .printable-template-only-container {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        z-index: 999999 !important;
+        background-color: #ffffff !important;
+    }
+
+    /* Stretch the empty template image to touch the exact edges of the A4/A5 sheet */
+    body.print-template-only .printable-template-only-container img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: fill !important; /* Bleeds and snaps perfectly to the paper boundary */
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+}
