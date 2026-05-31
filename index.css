@@ -2694,6 +2694,42 @@ h1, h2, h3, h4, .logo-text, .message-typography {
         width: 100% !important;
         height: 100% !important;
     }
+
+    /* Support full width written message layout when photo is absent */
+    .thiep-body.layout-full {
+        width: 100% !important;
+        display: block !important;
+    }
+    
+    .thiep-body.layout-full .thiep-message-box {
+        width: 100% !important;
+        flex: 1 !important;
+        text-align: center !important;
+    }
+    
+    .thiep-body.layout-full .thiep-message-text {
+        font-size: 1.32rem !important;
+        line-height: 1.8 !important;
+        text-align: center !important;
+        padding: 10px 0 !important;
+    }
+
+    /* Theme Ornaments Vector Graphics Visibility */
+    .theme-ornaments {
+        display: block !important;
+        position: absolute !important;
+        top: 0;
+        left: 0;
+        width: 100% !important;
+        height: 100% !important;
+        pointer-events: none !important;
+        box-sizing: border-box !important;
+        z-index: 10 !important;
+    }
+
+    .theme-svg {
+        display: block !important;
+    }
 }
 
 /* Off-screen styles during normal rendering */

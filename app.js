@@ -1197,19 +1197,31 @@ async function triggerCardPrinting(memoryId = null) {
         };
     }
     
+    // Check if there is a valid captured or uploaded photo in the memory
+    const hasValidPhoto = memory.photoUrl && 
+                          memory.photoUrl !== 'default_keepsake.png' && 
+                          memory.photoUrl.trim() !== '' && 
+                          !memory.photoUrl.startsWith('default_keepsake');
+
     // Compile gorgeous print frame structure
     const card = document.createElement('div');
-    card.className = `thiep-card theme-${appState.selectedPrintTheme || 'butterfly'}`;
+    card.className = `thiep-card theme-${appState.selectedPrintTheme || 'butterfly'} ${hasValidPhoto ? 'has-photo' : 'no-photo'}`;
+    
+    // Fetch high-fidelity thematic SVG ornaments matching the design language of the web
+    const themeOrnaments = getPrintThemeSVG(appState.selectedPrintTheme || 'butterfly');
     
     card.innerHTML = `
+        ${themeOrnaments}
         <div class="thiep-header">
             <div class="thiep-title">Lời Chúc 50 Năm</div>
             <div class="thiep-tagline">"Ký ức gia tộc là di sản ngàn đời"</div>
         </div>
-        <div class="thiep-body">
+        <div class="thiep-body ${hasValidPhoto ? 'layout-split' : 'layout-full'}">
+            ${hasValidPhoto ? `
             <div class="thiep-image-box">
                 <img src="${memory.photoUrl}" alt="Family print frame" class="thiep-img">
             </div>
+            ` : ''}
             <div class="thiep-message-box">
                 <div class="thiep-message-text">"${memory.text}"</div>
             </div>
@@ -1249,6 +1261,151 @@ async function triggerCardPrinting(memoryId = null) {
     
     // Fire real physical printer connection!
     window.print();
+}
+
+// Generate premium vector SVG ornaments matching the gorgeous theme language of the web
+function getPrintThemeSVG(themeName) {
+    if (themeName === 'butterfly') {
+        return `
+        <!-- Butterfly Theme Luxury SVGs -->
+        <div class="theme-ornaments butterfly-decorations" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; box-sizing:border-box;">
+            <!-- Left Top Crystalline Butterfly -->
+            <svg class="theme-svg top-left-butterfly" viewBox="0 0 100 100" style="position: absolute; top: 12mm; left: 12mm; width: 60px; height: 60px; filter: drop-shadow(0 2px 8px rgba(58, 134, 200, 0.3)); pointer-events: none;">
+                <path d="M50 50 C40 30, 20 20, 10 35 C5 45, 15 55, 30 50 C20 60, 15 75, 25 80 C35 85, 45 70, 50 50 Z" fill="rgba(255,255,255,0.9)" stroke="#3a86c8" stroke-width="1.8"/>
+                <path d="M50 50 C60 30, 80 20, 90 35 C95 45, 85 55, 70 50 C80 60, 85 75, 75 80 C65 85, 55 70, 50 50 Z" fill="rgba(255,255,255,0.9)" stroke="#3a86c8" stroke-width="1.8"/>
+                <path d="M50 30 C48 20, 42 15, 42 15 M50 30 C52 20, 58 15, 58 15" fill="none" stroke="#AA7C11" stroke-width="1.2"/>
+                <circle cx="42" cy="15" r="1.5" fill="#AA7C11"/>
+                <circle cx="58" cy="15" r="1.5" fill="#AA7C11"/>
+                <path d="M50 32 L50 75" stroke="#AA7C11" stroke-width="1.5"/>
+            </svg>
+            <!-- Right Bottom Crystalline Butterfly -->
+            <svg class="theme-svg bottom-right-butterfly" viewBox="0 0 100 100" style="position: absolute; bottom: 12mm; right: 12mm; width: 50px; height: 50px; filter: drop-shadow(0 2px 6px rgba(58, 134, 200, 0.25)); pointer-events: none; transform: rotate(-30deg);">
+                <path d="M50 50 C40 30, 20 20, 10 35 C5 45, 15 55, 30 50 C20 60, 15 75, 25 80 C35 85, 45 70, 50 50 Z" fill="rgba(255,255,255,0.9)" stroke="#3a86c8" stroke-width="1.5"/>
+                <path d="M50 50 C60 30, 80 20, 90 35 C95 45, 85 55, 70 50 C80 60, 85 75, 75 80 C65 85, 55 70, 50 50 Z" fill="rgba(255,255,255,0.9)" stroke="#3a86c8" stroke-width="1.5"/>
+                <path d="M50 32 L50 72" stroke="#AA7C11" stroke-width="1.2"/>
+            </svg>
+        </div>
+        `;
+    } else if (themeName === 'eden') {
+        return `
+        <!-- Eden Theme Foliage SVGs -->
+        <div class="theme-ornaments eden-decorations" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; box-sizing:border-box;">
+            <!-- Top-Left Foliage -->
+            <svg class="theme-svg top-left-vine" viewBox="0 0 120 120" style="position: absolute; top: -2px; left: -2px; width: 140px; height: 140px; pointer-events: none;">
+                <!-- Main vine branches -->
+                <path d="M0 0 Q40 5, 60 35 T100 80" fill="none" stroke="#27ae60" stroke-width="2"/>
+                <path d="M0 0 Q10 40, 35 60 T80 100" fill="none" stroke="#aa7c11" stroke-width="1.5"/>
+                <!-- Leaves -->
+                <path d="M25 12 C18 20, 22 28, 32 24 C38 20, 34 12, 25 12 Z" fill="#27ae60" stroke="#1e7e34" stroke-width="0.5"/>
+                <path d="M45 28 C38 35, 42 42, 52 38 C58 35, 54 28, 45 28 Z" fill="#aa7c11" stroke="#aa7c11" stroke-width="0.5" opacity="0.9"/>
+                <path d="M12 25 C5 32, 8 40, 18 36 C24 32, 20 25, 12 25 Z" fill="#27ae60" stroke="#1e7e34" stroke-width="0.5"/>
+                <path d="M65 52 C58 60, 62 68, 72 64 C78 60, 74 52, 65 52 Z" fill="#27ae60" stroke="#1e7e34" stroke-width="0.5"/>
+                <!-- Tiny golden rose bud at corner core -->
+                <circle cx="15" cy="15" r="5" fill="#e74c3c" stroke="#aa7c11" stroke-width="1"/>
+                <circle cx="12" cy="12" r="3" fill="#f1c40f"/>
+            </svg>
+            <!-- Bottom-Right Foliage -->
+            <svg class="theme-svg bottom-right-vine" viewBox="0 0 120 120" style="position: absolute; bottom: -2px; right: -2px; width: 140px; height: 140px; pointer-events: none; transform: rotate(180deg);">
+                <path d="M0 0 Q40 5, 60 35 T100 80" fill="none" stroke="#27ae60" stroke-width="2"/>
+                <path d="M0 0 Q10 40, 35 60 T80 100" fill="none" stroke="#aa7c11" stroke-width="1.5"/>
+                <path d="M25 12 C18 20, 22 28, 32 24 C38 20, 34 12, 25 12 Z" fill="#27ae60" stroke="#1e7e34" stroke-width="0.5"/>
+                <path d="M45 28 C38 35, 42 42, 52 38 C58 35, 54 28, 45 28 Z" fill="#aa7c11" stroke="#aa7c11" stroke-width="0.5" opacity="0.9"/>
+                <circle cx="15" cy="15" r="5" fill="#e74c3c" stroke="#aa7c11" stroke-width="1"/>
+            </svg>
+        </div>
+        `;
+    } else if (themeName === 'royal') {
+        return `
+        <!-- Royal Baroque Ornate Frames -->
+        <div class="theme-ornaments royal-decorations" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; box-sizing:border-box;">
+            <!-- Top-Center Royal Crest -->
+            <svg class="theme-svg top-crest" viewBox="0 0 120 60" style="position: absolute; top: 8mm; left: 50%; transform: translateX(-50%); width: 120px; height: 60px; fill: none; stroke: #AA7C11; stroke-width: 1.8; pointer-events: none;">
+                <!-- Shield shape -->
+                <path d="M60 5 C75 12, 95 12, 100 25 C100 45, 60 58, 60 58 C60 58, 20 45, 20 25 C25 12, 45 12, 60 5 Z" fill="rgba(255,255,255,0.95)"/>
+                <!-- Fluer-de-lis / Crown Inside shield -->
+                <path d="M60 15 C60 15, 52 25, 42 22 C38 20, 45 35, 60 40 C75 35, 82 20, 78 22 C68 25, 60 15, 60 15 Z" fill="#AA7C11"/>
+                <path d="M60 12 L60 40" stroke="#ffffff" stroke-width="1"/>
+                <!-- Little stars around -->
+                <circle cx="15" cy="20" r="1.5" fill="#AA7C11"/>
+                <circle cx="105" cy="20" r="1.5" fill="#AA7C11"/>
+            </svg>
+            <!-- Baroque Top-Left Corner Scrollwork -->
+            <svg class="theme-svg top-left-baroque" viewBox="0 0 100 100" style="position: absolute; top: 4px; left: 4px; width: 90px; height: 90px; fill: none; stroke: #AA7C11; stroke-width: 1.8; pointer-events: none;">
+                <path d="M10 90 L10 10 L90 10" stroke-width="1"/>
+                <path d="M18 82 L18 18 L82 18" stroke-dasharray="1,2" stroke-width="0.8"/>
+                <!-- Scroll leaf ornaments -->
+                <path d="M10 10 C20 20, 30 10, 35 25 C25 35, 10 20, 10 10 Z" fill="#AA7C11" opacity="0.15"/>
+                <path d="M10 10 C10 30, 20 40, 25 50 C15 45, 5 30, 10 10 Z" fill="#AA7C11" opacity="0.15"/>
+                <circle cx="10" cy="10" r="4.5" fill="#AA7C11"/>
+                <circle cx="10" cy="10" r="2" fill="#ffffff"/>
+            </svg>
+            <!-- Baroque Bottom-Right Corner Scrollwork -->
+            <svg class="theme-svg bottom-right-baroque" viewBox="0 0 100 100" style="position: absolute; bottom: 4px; right: 4px; width: 90px; height: 90px; fill: none; stroke: #AA7C11; stroke-width: 1.8; pointer-events: none; transform: rotate(180deg);">
+                <path d="M10 90 L10 10 L90 10" stroke-width="1"/>
+                <path d="M18 82 L18 18 L82 18" stroke-dasharray="1,2" stroke-width="0.8"/>
+                <path d="M10 10 C20 20, 30 10, 35 25 C25 35, 10 20, 10 10 Z" fill="#AA7C11" opacity="0.15"/>
+                <circle cx="10" cy="10" r="4.5" fill="#AA7C11"/>
+                <circle cx="10" cy="10" r="2" fill="#ffffff"/>
+            </svg>
+        </div>
+        `;
+    } else if (themeName === 'minimal') {
+        return `
+        <!-- Minimal Art Deco Geometric Lines -->
+        <div class="theme-ornaments minimal-decorations" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; box-sizing:border-box;">
+            <!-- Modern Intersecting Geometric Border Lines -->
+            <svg class="theme-svg minimal-lines" viewBox="0 0 200 200" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; fill: none; stroke: #AA7C11; stroke-width: 1; opacity: 0.9; pointer-events: none;">
+                <!-- Inner thin double border frame -->
+                <rect x="8" y="8" width="184" height="184" stroke-width="0.6"/>
+                <rect x="14" y="14" width="172" height="172" stroke-width="0.4" stroke-dasharray="3,1"/>
+                
+                <!-- Modern Art Deco Corner Elements -->
+                <!-- Top Left -->
+                <path d="M8 30 L30 8 M8 40 L40 8 M8 50 L50 8" stroke-width="0.5"/>
+                <!-- Top Right -->
+                <path d="M192 30 L170 8 M192 40 L160 8 M192 50 L150 8" stroke-width="0.5"/>
+                <!-- Bottom Left -->
+                <path d="M8 170 L30 192 M8 160 L40 192 M8 150 L50 192" stroke-width="0.5"/>
+                <!-- Bottom Right -->
+                <path d="M192 170 L170 192 M192 160 L160 192 M192 150 L150 192" stroke-width="0.5"/>
+                
+                <!-- Mid points diamond marks -->
+                <polygon points="100,5 103,8 100,11 97,8" fill="#AA7C11" stroke="none"/>
+                <polygon points="100,189 103,192 100,195 97,192" fill="#AA7C11" stroke="none"/>
+            </svg>
+        </div>
+        `;
+    } else if (themeName === 'firefly') {
+        return `
+        <!-- Magical Fireflies & Starry Night Constellations -->
+        <div class="theme-ornaments firefly-decorations" style="position: absolute; top:0; left:0; width:100%; height:100%; pointer-events:none; box-sizing:border-box;">
+            <!-- Glowing Constellation Dots & Sparkles -->
+            <svg class="theme-svg magical-stars" viewBox="0 0 200 200" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; fill: none; stroke: #f1c40f; stroke-width: 0.8; opacity: 0.9; pointer-events: none;">
+                <!-- Glowing star clusters top-left -->
+                <circle cx="25" cy="25" r="3" fill="#f1c40f" style="filter: drop-shadow(0 0 3px #f1c40f);"/>
+                <line x1="25" y1="18" x2="25" y2="32" stroke-width="0.75"/>
+                <line x1="18" y1="25" x2="32" y2="25" stroke-width="0.75"/>
+                
+                <!-- Glowing star clusters bottom-right -->
+                <circle cx="175" cy="175" r="3" fill="#f1c40f" style="filter: drop-shadow(0 0 3px #f1c40f);"/>
+                <line x1="175" y1="168" x2="175" y2="182" stroke-width="0.75"/>
+                <line x1="168" y1="175" x2="182" y2="175" stroke-width="0.75"/>
+                
+                <!-- Constellation connecting lines -->
+                <path d="M25 25 L50 15 L70 30 L100 10 L130 35 L175 25" stroke="rgba(241, 196, 15, 0.15)" stroke-width="0.8"/>
+                <path d="M25 175 L60 185 L90 160 L120 180 L150 165 L175 175" stroke="rgba(241, 196, 15, 0.15)" stroke-width="0.8"/>
+                
+                <!-- Bioluminescent firefly spots at corners -->
+                <circle cx="48" cy="18" r="1.5" fill="#f1c40f"/>
+                <circle cx="140" cy="30" r="2" fill="#ffd700"/>
+                <circle cx="15" cy="120" r="1.2" fill="#f1c40f"/>
+                <circle cx="185" cy="90" r="1.8" fill="#ffd700"/>
+                <circle cx="95" cy="185" r="2.5" fill="#f1c40f" style="filter: drop-shadow(0 0 2px #f1c40f);"/>
+            </svg>
+        </div>
+        `;
+    }
+    return '';
 }
 
 // Global variable to store active target keepsake for printing
