@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lời Chúc 50 Năm - Lưu Giữ Ký Ức Gia Đình</title>
+    
+    <!-- Google Fonts: Playfair Display for headings & Inter for body text -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- QRCode.js Library for high-fidelity offline/online QR Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" integrity="sha512-CNgIRecGo7nOMdBq78VGNRIQux9YkqBro75hybe3mUt3ch8nj6DYVLHSLGS38TzyAM67hFcLYi3M4c5OdtdA1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- html2pdf.js for premium PDF keepsakes export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5IfS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- Vanilla CSS File Link -->
+    <link rel="stylesheet" href="index.css?v=1.1.0">
+</head>
+<body>
+
+    <!-- Paper Texture Overlay for vintage feel -->
+    <div class="paper-texture"></div>
+    
+    <!-- Floating particles background (for Home and Recording views) -->
+    <div id="ambient-particles" class="ambient-particles"></div>
+
+    <!-- ----------------------------------------- -->
+    <!-- SCREEN 0: LOGIN VIEW                      -->
+    <!-- ----------------------------------------- -->
+    <section id="login-view" class="view-section active">
+        <div class="login-wrapper">
+            <div class="vintage-envelope">
+                <div class="envelope-seal">
+                    <svg viewBox="0 0 100 100" class="seal-svg">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#D4AF37" stroke-width="2"/>
+                        <path d="M30 40 C 30 25, 70 25, 70 40 C 70 65, 50 80, 50 80 C 50 80, 30 65, 30 40 Z" fill="#D4AF37" opacity="0.85"/>
+                        <text x="50" y="55" font-family="'Playfair Display', serif" font-size="20" font-weight="bold" fill="#F9F6F0" text-anchor="middle">50</text>
+                    </svg>
+                </div>
+                
+                <h1 class="login-title">Lời Chúc 50 Năm</h1>
+                <p class="login-tagline">"Mở cánh cửa thời gian, bước vào nơi lưu giữ những lời chúc truyền đời."</p>
+                
+                <form id="login-form" onsubmit="event.preventDefault(); handleLogin();">
+                    <div class="input-group">
+                        <label for="family-name">Tên gia đình của bạn</label>
+                        <input type="text" id="family-name" placeholder="Ví dụ: Gia đình Nguyễn An..." required>
+                    </div>
+                    <div class="input-group">
+                        <label for="gmail-link">Địa chỉ Gmail liên kết (Google Drive)</label>
+                        <input type="email" id="gmail-link" placeholder="username@gmail.com" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary login-btn">
+                        <span>Bước vào Ký Ức</span>
+                        <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </button>
+                </form>
+                
+                <p class="login-footer">Mỗi gia đình là một chương trong cuốn sách lịch sử bất tận.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ----------------------------------------- -->
+    <!-- HEADER NAVIGATION (For screen 1, 2, 3)     -->
+    <!-- ----------------------------------------- -->
+    <header id="main-header" class="main-header hidden">
+        <div class="header-logo">
+            <span class="logo-text">Lời Chúc 50 Năm</span>
+            <span class="logo-family-tag" id="header-family-tag">Gia Đình</span>
+        </div>
+        
+        <nav class="header-nav">
+            <button class="nav-item active" onclick="switchView('landing-view')">Trang chủ</button>
+            <button class="nav-item" onclick="switchView('recording-view')">Capsule Time</button>
+            <button class="nav-item" onclick="switchView('tree-view')">Memory Tree</button>
+            <button class="nav-item" onclick="switchView('archive-view')">Kho Ký Ức</button>
+        </nav>
+        
+        <div class="header-right">
+            <button class="icon-btn tooltip" data-tooltip="Thông báo" onclick="toggleNotificationPanel()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+                </svg>
+                <span class="pulse-badge" id="noti-badge"></span>
+            </button>
+            <div class="user-avatar" onclick="handleLogout()" title="Đăng xuất">
+                <span id="avatar-letter">G</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ----------------------------------------- -->
+    <!-- SCREEN 1: LANDING PAGE VIEW               -->
+    <!-- ----------------------------------------- -->
+    <section id="landing-view" class="view-section hidden">
+        <div class="landing-hero">
+            <div class="hero-content">
+                <h1 class="hero-title animate-title">Lời Chúc 50 Năm</h1>
+                <p class="hero-subtitle animate-subtitle">Lưu giữ cảm xúc hôm nay, gửi lại yêu thương cho tương lai.</p>
+                
+                <button class="btn-primary animate-btn" onclick="switchView('recording-view')">
+                    <span>Bắt đầu ghi lời chúc</span>
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Dynamic Glowing Digital Time Capsule Visual -->
+            <div class="hero-visual">
+                <div class="capsule-visual-container">
+                    <div class="capsule-glow-aura"></div>
+                    <canvas id="capsule-canvas" class="capsule-canvas"></canvas>
+                    <div class="capsule-box-fallback">
+                        <div class="capsule-face front"></div>
+                        <div class="capsule-face back"></div>
+                        <div class="capsule-face top"></div>
+                        <div class="capsule-face bottom"></div>
+                        <div class="capsule-face left"></div>
+                        <div class="capsule-face right"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3 Steps Section -->
+        <div class="landing-section steps-section">
+            <h2 class="section-title">Hành Trình Gieo Ký Ức</h2>
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-num">01</div>
+                    <h3 class="step-title">Ghi lại khoảnh khắc</h3>
+                    <p class="step-desc">Chụp hình gia đình, thu âm giọng nói ấm áp hoặc viết một bức thư tay đầy cảm xúc chân thành.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">02</div>
+                    <h3 class="step-title">Chọn mốc thời gian</h3>
+                    <p class="step-desc">Thiết lập chu kỳ gửi tới tương lai: 1 năm, 10 năm, hoặc lên tới nửa thế kỷ (50 năm) trao truyền.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">03</div>
+                    <h3 class="step-title">Gieo mầm vĩnh cửu</h3>
+                    <p class="step-desc">Đưa ký ức lên Cây Hằng Hữu, in thành những tấm thiệp nghệ thuật tinh xảo kèm mã QR truy xuất độc bản.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Why Preserve Memories Section -->
+        <div class="landing-section why-section">
+            <div class="why-wrapper">
+                <div class="why-text">
+                    <h2 class="why-title">Tại sao cần lưu giữ ký ức gia đình?</h2>
+                    <p class="why-p">Thời gian trôi đi, giọng nói ấm áp hay nụ cười của cha mẹ, tiếng cười đùa thơ dại của con trẻ sẽ dần phai nhạt trong tâm trí. Hộp viên nang thời gian <strong>"Lời Chúc 50 Năm"</strong> hoạt động như một bảo tàng ký ức nghệ thuật, bảo vệ những khoảnh khắc quý giá nhất khỏi bụi mờ thời gian, kết nối mạch yêu thương giữa các thế hệ.</p>
+                    <div class="why-metric">
+                        <div class="metric-item">
+                            <span class="metric-val">100%</span>
+                            <span class="metric-lbl">Bảo mật & Cố định</span>
+                        </div>
+                        <div class="metric-item">
+                            <span class="metric-val">50Y+</span>
+                            <span class="metric-lbl">Lưu trữ truyền đời</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="why-visual">
+                    <div class="glass-photo-frame">
+                        <img src="default_keepsake.png" alt="Family memory vintage" class="why-img">
+                        <div class="frame-caption">Hộp viên nang thời gian lưu trữ truyền đời Lời Chúc 50 Năm.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Memory Showcase Cards -->
+        <div class="landing-section showcase-section">
+            <h2 class="section-title">Những Hạt Mầm Ký Ức Đầu Tiên</h2>
+            <div class="showcase-carousel">
+                <div class="showcase-card">
+                    <img src="https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=400&q=80" alt="Showcase family" class="card-bg">
+                    <div class="card-overlay">
+                        <span class="card-date">24 Tết, 2026</span>
+                        <h4 class="card-name">Bữa cơm tất niên gia đình</h4>
+                        <p class="card-snippet">"Hương vị bánh chưng của mẹ và nụ cười rạng rỡ của bố..."</p>
+                    </div>
+                </div>
+                <div class="showcase-card">
+                    <img src="https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=400&q=80" alt="Showcase wedding" class="card-bg">
+                    <div class="card-overlay">
+                        <span class="card-date">15/09/2025</span>
+                        <h4 class="card-name">Lời chúc ngày cưới của con gái</h4>
+                        <p class="card-snippet">"Chúc con luôn giữ được ngọn lửa ấm áp nơi tổ ấm nhỏ..."</p>
+                    </div>
+                </div>
+                <div class="showcase-card">
+                    <img src="https://images.unsplash.com/photo-1476703993599-0035a21b17a9?auto=format&fit=crop&w=400&q=80" alt="Showcase grandpa" class="card-bg">
+                    <div class="card-overlay">
+                        <span class="card-date">Mùa đông, 2024</span>
+                        <h4 class="card-name">Giọng kể chuyện của Ông Nội</h4>
+                        <p class="card-snippet">"Lưu giữ lại câu chuyện thuở khai hoang lập nghiệp..."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="landing-section testimonials-section">
+            <h2 class="section-title">Lời Bộc Bạch Từ Người Gieo Mầm</h2>
+            <div class="testimonials-grid">
+                <div class="testi-card">
+                    <p class="testi-text">"Được nghe lại giọng nói của cha mẹ từ 10 năm trước trong ngày cưới của con gái mình là một cảm xúc không thể diễn tả bằng lời. Nền tảng thực sự là một di sản vô giá cho gia đình tôi."</p>
+                    <div class="testi-author">- Chị Minh Anh, Hà Nội</div>
+                </div>
+                <div class="testi-card">
+                    <p class="testi-text">"Tính năng chụp ảnh và in thiệp kèm mã QR của trang web rất dễ dùng. Ông bà chỉ cần quét mã QR dán sau khung ảnh là nghe được lời nhắn của con cháu ở xa."</p>
+                    <div class="testi-author">- Anh Hoàng Nam, TP. Hồ Chí Minh</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="vintage-footer">
+            <div class="footer-top">
+                <span class="footer-logo">Lời Chúc 50 Năm</span>
+                <p class="footer-moto">Giữ nhiệt cảm xúc hôm nay, soi sáng hành trình tương lai.</p>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Lời Chúc 50 Năm. Tất cả quyền được bảo lưu.</p>
+                <div class="footer-links">
+                    <a href="#">Điều khoản bảo mật</a>
+                    <a href="#">Hướng dẫn in ấn</a>
+                    <a href="#">Liên kết Google Drive</a>
+                </div>
+            </div>
+        </footer>
+    </section>
+
+    <!-- ----------------------------------------- -->
+    <!-- SCREEN 2: CAPSULE TIME (Recording & Pres) -->
+    <!-- ----------------------------------------- -->
+    <section id="recording-view" class="view-section hidden">
+        
+        <!-- Standard Recording Interface (Before Saving) -->
+        <div id="recording-capture-panel" class="recording-capture-panel">
+            <div class="section-header">
+                <h1 class="recording-title">Ghi lại khoảnh khắc này</h1>
+                <p class="recording-subtitle">Hãy để lại lời nhắn cho tương lai</p>
+            </div>
+            
+            <!-- Central Microphone Section -->
+            <div class="microphone-section">
+                <div class="mic-outer-ring">
+                    <div class="waveform-bg" id="waveform-container">
+                        <!-- Waveform SVG nodes dynamically updated in script -->
+                        <svg class="waveform-svg" viewBox="0 0 200 100" id="waveform-svg">
+                            <path d="M10,50 Q30,50 50,50 T90,50 T130,50 T170,50 T190,50" fill="none" stroke="rgba(212, 175, 55, 0.3)" stroke-width="2" id="waveform-path-base"/>
+                            <path d="M10,50 Q30,50 50,50 T90,50 T130,50 T170,50 T190,50" fill="none" stroke="#D4AF37" stroke-width="3" id="waveform-path-active"/>
+                        </svg>
+                    </div>
+                    <button class="mic-button" id="mic-trigger-btn" onclick="toggleAudioRecording()">
+                        <svg class="mic-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                            <path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v4M8 23h8"/>
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="timer-display" id="recording-timer">00:00</div>
+                
+                <div class="recording-controls">
+                    <button class="btn-primary" id="mic-main-action-btn" onclick="toggleAudioRecording()">Ghi âm</button>
+                    
+                    <!-- AI Speech-to-text Toggle -->
+                    <button class="btn-secondary outline-gold tooltip" id="speech-to-text-toggle" data-tooltip="Tự động dịch giọng nói sang văn bản khi ghi âm" onclick="toggleSpeechToText()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                            <path d="M8 7h8M8 11h8M8 15h5"/>
+                        </svg>
+                        <span id="speech-mode-label">AI Dịch chữ: Tắt</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Dynamic Audio/Speech-to-Text Visual Preview Area -->
+            <div id="speech-transcript-box" class="speech-transcript-box hidden">
+                <div class="transcript-header">
+                    <span>AI Ghi nhận Giọng nói (Speech-to-Text)</span>
+                    <button class="small-close-btn" onclick="clearTranscript()">Xóa chữ</button>
+                </div>
+                <textarea id="speech-transcript-textarea" class="transcript-textarea" placeholder="Chữ dịch từ giọng nói của bạn sẽ xuất hiện tại đây khi bạn nói... Bạn có thể tự chỉnh sửa thủ công."></textarea>
+            </div>
+
+            <!-- Horizontal Action Cards Row (Chụp ảnh, Viết thư, Quay video) -->
+            <div class="action-cards-row">
+                <div class="action-card tooltip" data-tooltip="Kết nối máy ảnh và chụp hình" onclick="openCameraModal()">
+                    <div class="card-icon-container">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                            <circle cx="12" cy="13" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="card-meta">
+                        <h4 class="card-card-title">Chụp ảnh</h4>
+                        <span class="card-card-subtitle">Lưu khoảnh khắc</span>
+                    </div>
+                </div>
+
+                <div class="action-card tooltip" data-tooltip="Viết một bức thư tay chân thành" onclick="openTextEditorModal()">
+                    <div class="card-icon-container">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        </svg>
+                    </div>
+                    <div class="card-meta">
+                        <h4 class="card-card-title">Viết lời nhắn</h4>
+                        <span class="card-card-subtitle">Ghi chú văn bản</span>
+                    </div>
+                </div>
+
+                <div class="action-card tooltip" data-tooltip="Ghi lại video kỷ niệm từ webcam" onclick="openVideoModal()">
+                    <div class="card-icon-container">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 7l-7 5 7 5V7z"/>
+                            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                        </svg>
+                    </div>
+                    <div class="card-meta">
+                        <h4 class="card-card-title">Quay video</h4>
+                        <span class="card-card-subtitle">Ghi lại khoảnh khắc</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Floating Preview for Taken Attachments -->
+            <div id="captured-attachments-bar" class="captured-attachments-bar hidden">
+                <span class="bar-title">Dữ liệu sẵn sàng lưu trữ:</span>
+                <div class="attachments-list" id="attachments-list">
+                    <!-- Dynamic preview icons of taken image/text/video/audio -->
+                </div>
+            </div>
+
+            <!-- Bottom Primary CTA Button -->
+            <div class="save-capsule-button-container">
+                <button class="btn-primary btn-luxury-save" onclick="handleSaveMemory()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                        <polyline points="17 21 17 13 7 13 7 21"/>
+                        <polyline points="7 3 7 8 15 8"/>
+                    </svg>
+                    <span>Lưu Ký Ức</span>
+                </button>
+                <p class="bottom-subtle-hint">Ký ức sẽ được lưu vào Time Capsule.</p>
+            </div>
+        </div>
+
+        <!-- ----------------------------------------- -->
+        <!-- POST-SAVE SCREEN: Memory Saved Preview     -->
+        <!-- ----------------------------------------- -->
+        <div id="recording-saved-panel" class="recording-saved-panel hidden">
+            <div class="section-header">
+                <h1 class="recording-title">Ký ức của bạn đã được lưu</h1>
+                <p class="recording-subtitle">Bạn muốn làm gì tiếp theo?</p>
+            </div>
+
+            <div class="saved-main-content">
+                <!-- Center Main Preview Card (Left: image preview, Right: text/audio play) -->
+                <div class="preview-center-card">
+                    <!-- Left Side: Image Preview -->
+                    <div class="preview-left-side">
+                        <div class="preview-image-wrapper">
+                            <img id="saved-preview-img" src="default_keepsake.png" alt="Preview family" class="preview-main-img">
+                            <div class="preview-date-badge">
+                                <span class="date-tag" id="saved-preview-date">20/05/2026</span>
+                                <span class="time-tag" id="saved-preview-time">21:56</span>
+                            </div>
+                            <span class="preview-label">Ký ức gia đình</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Message text and Audio Playback -->
+                    <div class="preview-right-side">
+                        <div class="written-message-preview">
+                            <svg class="quotes-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.988zm-12 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.154c-2.433.914-3.996 3.635-3.996 5.846h3.999v10h-9.999z"/>
+                            </svg>
+                            <p class="message-typography" id="saved-preview-text">
+                                Con chúc ba mẹ luôn mạnh khỏe, hạnh phúc và bình an. Con yêu ba mẹ rất nhiều!
+                            </p>
+                        </div>
+
+                        <!-- Audio playback component -->
+                        <div class="audio-playback-container" id="saved-preview-audio-container">
+                            <button class="audio-play-btn" id="preview-audio-play-btn" onclick="toggleSavedAudioPlayback()">
+                                <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" id="play-icon-svg">
+                                    <polygon points="5 3 19 12 5 21 5 3"/>
+                                </svg>
+                                <svg class="pause-icon hidden" viewBox="0 0 24 24" fill="currentColor" id="pause-icon-svg">
+                                    <rect x="6" y="4" width="4" height="16"/>
+                                    <rect x="14" y="4" width="4" height="16"/>
+                                </svg>
+                            </button>
+                            <div class="audio-wave-visualizer-static">
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                                <span class="bar animate-bar"></span>
+                            </div>
+                            <span class="audio-duration" id="saved-preview-audio-duration">00:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Sidebar: Info, Google Drive, Tree Link -->
+                <div class="saved-sidebar">
+                    
+                    <!-- Meta info of capsule -->
+                    <div class="sidebar-section">
+                        <h4 class="sidebar-title">Thông tin ký ức</h4>
+                        <div class="meta-info-grid">
+                            <span class="meta-label">Ngày lưu:</span>
+                            <span class="meta-value" id="meta-save-date">20/05/2026</span>
+
+                            <span class="meta-label">Thời gian:</span>
+                            <span class="meta-value" id="meta-save-time">21:56</span>
+
+                            <span class="meta-label">Loại ký ức:</span>
+                            <span class="meta-value" id="meta-save-type">Ảnh & Lời chúc</span>
+
+                            <span class="meta-label">Dung lượng:</span>
+                            <span class="meta-value" id="meta-save-size">342 KB</span>
+                        </div>
+                    </div>
+
+                    <!-- Small Glowing Memory Tree seeds indicator -->
+                    <div class="sidebar-section glow-gold-border text-center seed-tree-banner">
+                        <div class="sprout-icon-anim">🌱</div>
+                        <h4 class="gold-text m-0">Ký ức đã được gieo mầm</h4>
+                        <p class="subtle-caption mt-1">Một quả đom đóm sáng mới đã mọc trên cây kỷ niệm của dòng họ.</p>
+                        <button class="btn-primary btn-small mt-2" onclick="switchView('tree-view')">Xem trên Cây Ký Ức</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom 4 Equal Premium Action Cards in 1 Row -->
+            <div class="bottom-action-buttons-row">
+                <div class="action-card-btn tooltip" data-tooltip="Đưa ký ức này vào danh sách lưu trữ trên web" onclick="saveToWebCapsule()">
+                    <div class="action-card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 8v13H3V8M1 3h22v5H1V3z"/>
+                        </svg>
+                    </div>
+                    <div class="action-card-text">
+                        <h4 class="btn-card-title">Lưu vào Time Capsule</h4>
+                        <span class="btn-card-subtitle">Bảo tồn cho tương lai</span>
+                    </div>
+                </div>
+
+                <div class="action-card-btn tooltip" data-tooltip="Đồng bộ lưu giữ trực tiếp lên Google Drive của Gmail liên kết" onclick="syncWithGoogleDrive()">
+                    <div class="action-card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        </svg>
+                    </div>
+                    <div class="action-card-text">
+                        <h4 class="btn-card-title">Lưu lên Google Drive</h4>
+                        <span class="btn-card-subtitle">Lưu trữ đám mây an toàn</span>
+                    </div>
+                </div>
+
+                <div class="action-card-btn tooltip" data-tooltip="Tạo mã QR độc bản lưu liên kết thiệp" onclick="showQRCodePopup()">
+                    <div class="action-card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="3" width="7" height="7"/>
+                            <rect x="14" y="3" width="7" height="7"/>
+                            <rect x="14" y="14" width="7" height="7"/>
+                            <rect x="3" y="14" width="7" height="7"/>
+                        </svg>
+                    </div>
+                    <div class="action-card-text">
+                        <h4 class="btn-card-title">Tạo mã QR</h4>
+                        <span class="btn-card-subtitle">Lưu giữ & chia sẻ</span>
+                    </div>
+                </div>
+
+                <div class="action-card-btn tooltip" data-tooltip="Kích hoạt in tấm thiệp độc bản chứa ảnh & chữ" onclick="showPrintSizeModal()">
+                    <div class="action-card-icon-wrapper">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 6 2 18 2 18 9"/>
+                            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+                            <rect x="6" y="14" width="12" height="8"/>
+                        </svg>
+                    </div>
+                    <div class="action-card-text">
+                        <h4 class="btn-card-title">In thành thiệp</h4>
+                        <span class="btn-card-subtitle">In ảnh & lời chúc</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cancel/Reset buttons for making another memory -->
+            <div class="text-center mt-3" style="margin-bottom: 2rem;">
+                <button class="btn-secondary" onclick="resetToRecordScreen()">Ghi nhận Ký Ức Mới</button>
+            </div>
+
+            <p class="bottom-pres-text">Ký ức này sẽ được bảo tồn cho các thế hệ tương lai.</p>
+        </div>
+    </section>
+
+    <!-- ----------------------------------------- -->
+    <!-- SCREEN 3: MEMORY TREE (Interactive 3D/Can) -->
+    <!-- ----------------------------------------- -->
+    <section id="tree-view" class="view-section hidden">
+        <div class="tree-container">
+            <div class="tree-header-container">
+                <h1 class="tree-main-title">Cây Ký Ức Vĩnh Hằng</h1>
+                <p class="tree-subtitle">Những quả cầu lấp lánh như đom đóm rực rỡ lưu giữ các tệp ảnh kỷ niệm gia tộc</p>
+            </div>
+
+            <!-- Mirror Floor Canvas visual representing bioluminescent Eternal Tree -->
+            <div class="tree-canvas-wrapper" id="tree-canvas-wrapper">
+                <canvas id="eternal-tree-canvas" class="eternal-tree-canvas"></canvas>
+            </div>
+
+            <!-- Floating Glassmorphism Lời Nhắn Tương Lai Panel on the Right -->
+            <div class="future-gazing-panel">
+                <h3 class="future-title">Lời Nhắn Tương Lai</h3>
+                
+                <div class="future-time-selector">
+                    <span class="selector-label">Thiết lập chu kỳ gửi ký ức:</span>
+                    <div class="slider-wrapper">
+                        <input type="range" id="future-time-slider" min="1" max="4" value="1" step="1" oninput="updateFutureSliderText(this.value)">
+                        <div class="slider-labels">
+                            <span class="slider-lbl" onclick="setSliderValue(1)">1 Năm</span>
+                            <span class="slider-lbl" onclick="setSliderValue(2)">10 Năm</span>
+                            <span class="slider-lbl" onclick="setSliderValue(3)">50 Năm</span>
+                            <span class="slider-lbl" onclick="setSliderValue(4)">Truyền đời</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="active-reminder-status" id="active-reminder-box">
+                    <div class="status-indicator-dot pulse"></div>
+                    <div class="status-content">
+                        <span class="status-title">Nhắc nhở đang hoạt động</span>
+                        <span class="status-detail" id="reminder-detail-text">Vòng hào quang vàng sẽ bao quanh quả ký ức được chọn.</span>
+                    </div>
+                </div>
+
+                <button class="btn-primary w-full mt-2" onclick="activateFutureMemoryCycle()">
+                    <span>Kích hoạt Chu kỳ Ký ức</span>
+                </button>
+                
+                <p class="future-sub-hint" id="future-unlock-date-info">Thông báo sẽ được gửi tới hậu thế vào ngày 20/05/2027.</p>
+            </div>
+
+            <!-- Bottom Control Bar -->
+            <div class="tree-control-bar">
+                <button class="control-bar-item tooltip" data-tooltip="Gieo mầm quả mới (Tải ảnh)" onclick="openTreeUploader()">
+                    <span class="control-icon">+</span>
+                    <span class="control-text">Gieo mầm</span>
+                </button>
+                <div class="bar-separator"></div>
+                <button class="control-bar-item tooltip" data-tooltip="Xem danh sách tất cả các quả ký ức" onclick="openMemoryOrbsGrid()">
+                    <svg class="control-svg-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"/>
+                        <rect x="14" y="3" width="7" height="7"/>
+                        <rect x="14" y="14" width="7" height="7"/>
+                        <rect x="3" y="14" width="7" height="7"/>
+                    </svg>
+                    <span class="control-text">Vườn ký ức</span>
+                </button>
+                <div class="bar-separator"></div>
+                <button class="control-bar-item tooltip" data-tooltip="Cài đặt lời nhắc tương lai" onclick="focusFuturePanel()">
+                    <svg class="control-svg-icon animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span class="control-text">Cài đặt Lời nhắc</span>
+                </button>
+            </div>
+
+            <!-- Music Widget in bottom right -->
+            <div class="ambient-music-widget">
+                <button class="music-play-toggle-btn" onclick="toggleAmbientMusic()" id="music-widget-play-btn">
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5" id="music-widget-play-svg">
+                        <polygon points="5 3 19 12 5 21 5 3"/>
+                    </svg>
+                    <svg viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 hidden" id="music-widget-pause-svg">
+                        <rect x="6" y="4" width="4" height="16"/>
+                        <rect x="14" y="4" width="4" height="16"/>
+                    </svg>
+                </button>
+                
+                <div class="music-info-pill" onclick="showMusicListPopup()">
+                    <span class="music-track-title" id="active-track-name">Nhạc nhẹ hoài niệm</span>
+                    <!-- Wave visualizer pills -->
+                    <div class="music-wave-bars" id="music-wave-bars">
+                        <span class="mbar"></span>
+                        <span class="mbar"></span>
+                        <span class="mbar"></span>
+                        <span class="mbar"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ----------------------------------------- -->
+    <!-- SCREEN 4: MEMORY ARCHIVE VIEW             -->
+    <!-- ----------------------------------------- -->
+    <section id="archive-view" class="view-section hidden">
+        <div class="archive-container">
+            <div class="archive-header">
+                <h1 class="archive-title">Kho Lưu Trữ Ký Ức</h1>
+                <p class="archive-subtitle">Nơi lưu giữ vĩnh hằng các viên nang thời gian của dòng họ</p>
+            </div>
+            
+            <div id="archive-grid" class="archive-grid">
+                <!-- Dynamic memory cards will be inserted here -->
+            </div>
+            
+            <div id="archive-empty-state" class="archive-empty-state">
+                <div class="empty-icon">⏳</div>
+                <h3>Kho lưu trữ chưa có ký ức nào</h3>
+                <p>Hãy bắt đầu hành trình gieo hạt ký ức bằng cách tạo lời chúc đầu tiên của bạn.</p>
+                <button class="btn-primary" onclick="switchView('recording-view')">Ghi lời chúc ngay</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ----------------------------------------- -->
+    <!-- MODALS AND POPUPS                         -->
+    <!-- ----------------------------------------- -->
+
+    <!-- 1. CAMERA / CAPTURE MODAL -->
+    <div id="camera-modal" class="modal-overlay hidden">
+        <div class="modal-card luxury-border glass-panel">
+            <div class="modal-header">
+                <h3 class="modal-title">Ghi hình gia đình</h3>
+                <button class="modal-close-btn" onclick="closeCameraModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="modal-body text-center">
+                <div class="camera-stream-wrapper">
+                    <!-- HTML5 live stream -->
+                    <video id="device-camera-stream" autoplay playsinline class="camera-video-node"></video>
+                    <!-- Visual frame guidelines -->
+                    <div class="camera-gold-crosshair"></div>
+                    <canvas id="camera-snapshot-canvas" class="hidden"></canvas>
+                </div>
+                
+                <div class="camera-actions">
+                    <button class="btn-primary btn-luxury-camera" onclick="captureCameraSnapshot()">Chụp hình</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. VIDEO RECORDING MODAL -->
+    <div id="video-modal" class="modal-overlay hidden">
+        <div class="modal-card luxury-border glass-panel">
+            <div class="modal-header">
+                <h3 class="modal-title">Quay phim kỷ niệm</h3>
+                <button class="modal-close-btn" onclick="closeVideoModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="modal-body text-center">
+                <div class="camera-stream-wrapper">
+                    <video id="device-video-record-stream" autoplay playsinline class="camera-video-node"></video>
+                    <div class="video-record-indicator hidden" id="video-recording-indicator">
+                        <span class="record-red-dot animate-pulse"></span>
+                        <span class="record-time" id="video-timer">00:00</span>
+                    </div>
+                </div>
+                
+                <div class="camera-actions">
+                    <button class="btn-primary" id="video-rec-action-btn" onclick="toggleVideoRecording()">Bắt đầu quay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. TEXT EDITOR MODAL -->
+    <div id="text-editor-modal" class="modal-overlay hidden">
+        <div class="modal-card luxury-border glass-panel">
+            <div class="modal-header">
+                <h3 class="modal-title">Viết thư gửi mai sau</h3>
+                <button class="modal-close-btn" onclick="closeTextEditorModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-editor-container">
+                    <textarea id="capsule-letter-textarea" class="capsule-letter-textarea" placeholder="Nhập những lời yêu thương quý giá tại đây... Chúc con cháu luôn vững bước trên đường đời, hãy nhớ về nguồn cội gia tộc..."></textarea>
+                </div>
+                <div class="text-right mt-2">
+                    <button class="btn-primary" onclick="saveLetterText()">Lưu bức thư</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. QR CODE POPUP -->
+    <div id="qrcode-popup" class="modal-overlay hidden" onclick="closeQRCodePopup(event)">
+        <div class="modal-card small-modal luxury-border glass-panel" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Mã QR Ký Ức</h3>
+                <button class="modal-close-btn" onclick="closeQRCodePopup(null)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <p class="modal-subtle-hint">Quét mã QR dưới đây bằng điện thoại để xem trực tiếp thiệp ký ức.</p>
+                <div class="qrcode-wrapper-center">
+                    <div id="qrcode-canvas-node" class="qrcode-display-node"></div>
+                </div>
+                <div class="qrcode-actions mt-2">
+                    <button class="btn-primary btn-small w-full" onclick="triggerCardPrinting()">In thiệp kèm mã QR</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. TREE IMAGE UPLOADER MODAL (GIEO MẦM) -->
+    <div id="tree-uploader-modal" class="modal-overlay hidden">
+        <div class="modal-card luxury-border glass-panel">
+            <div class="modal-header">
+                <h3 class="modal-title">Gieo mầm Quả Ký Ức mới</h3>
+                <button class="modal-close-btn" onclick="closeTreeUploader()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="upload-dropzone" id="upload-dropzone" onclick="triggerTreeFileInput()">
+                    <div class="upload-icon">☁️</div>
+                    <h4 class="upload-headline">Kéo thả ảnh gia đình hoặc nhấp để chọn tệp</h4>
+                    <p class="upload-subtext">Hỗ trợ các định dạng PNG, JPG, JPEG. Quả mới sẽ kết hạt tinh khôi rực sáng lấp lánh như vệt đom đóm trắng trong tán lá hồng.</p>
+                    <input type="file" id="tree-file-input" accept="image/*" class="hidden" multiple onchange="handleTreeFilesUpload(this.files)">
+                </div>
+                <div class="progress-bar-container hidden" id="upload-progress-container">
+                    <div class="progress-fill" id="upload-progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. MEMORY ORBS GALLERY MODAL (POLAROID VIEW) -->
+    <div id="orbs-gallery-modal" class="modal-overlay hidden">
+        <div class="modal-card large-modal luxury-border glass-panel">
+            <div class="modal-header">
+                <h3 class="modal-title" id="gallery-orb-title">Danh mục quả ký ức ngày hôm nay</h3>
+                <button class="modal-close-btn" onclick="closeOrbsGallery()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="polaroid-grid" id="polaroid-grid-container">
+                    <!-- Polaroid cards go here dynamically -->
+                </div>
+                
+                <div class="gallery-overall-actions text-center mt-3">
+                    <button class="btn-secondary outline-red" onclick="deleteEntireOrb()">Xóa cả quả ký ức</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. ROYALTY FREE MUSIC CHANGER POPUP -->
+    <div id="music-list-popup" class="modal-overlay hidden" onclick="closeMusicListPopup(event)">
+        <div class="modal-card small-modal luxury-border glass-panel" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Giai Điệu Hoài Niệm</h3>
+                <button class="modal-close-btn" onclick="closeMusicListPopup(null)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-subtle-hint">Chọn một bản nhạc acoustic ballad hoài niệm không lời được AI tối ưu hóa cho ký ức gia đình.</p>
+                <div class="music-tracks-list" id="music-tracks-list">
+                    <!-- Rendered tracks dynamically in JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 8. CUSTOM PREMIUM ALERT MODAL -->
+    <div id="custom-alert-modal" class="modal-overlay hidden" onclick="closeCustomAlert()">
+        <div class="modal-card small-modal luxury-border glass-panel" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title" id="custom-alert-title">Thông báo từ Ký Ức</h3>
+                <button class="modal-close-btn" onclick="closeCustomAlert()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <div class="custom-alert-icon" id="custom-alert-icon" style="font-size: 3rem; margin-bottom: 16px;">✨</div>
+                <div class="custom-alert-message" id="custom-alert-message" style="font-size: 0.95rem; line-height: 1.6; color: var(--color-text-brown); margin-bottom: 24px; text-align: left;"></div>
+                <button class="btn-primary w-full" onclick="closeCustomAlert()" id="custom-alert-confirm-btn">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 10. PRINT SIZE SELECTION MODAL -->
+    <div id="print-size-modal" class="modal-overlay hidden" onclick="closePrintSizeModal()">
+        <div class="modal-card small-modal luxury-border glass-panel" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3 class="modal-title">Chọn Khổ Thiệp In</h3>
+                <button class="modal-close-btn" onclick="closePrintSizeModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body text-center" style="display: flex; flex-direction: column; gap: 16px; padding: 24px;">
+                <div style="font-size: 3rem; margin-bottom: 8px;">🖨️</div>
+                <p class="modal-subtle-hint" style="margin-bottom: 12px; font-size: 0.9rem; line-height: 1.5;">
+                    Vui lòng chọn kích thước thiệp in phù hợp để tối ưu hoá căn chỉnh vừa khít 1 trang giấy, không bị tràn sang trang thứ hai.
+                </p>
+                
+                <button class="btn-primary w-full" onclick="confirmPrintSize('a4')" style="padding: 14px; font-size: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; height: auto;">
+                    <strong style="font-size: 1.05rem;">Khổ Giấy A4 (Lớn)</strong>
+                    <span style="font-size: 0.78rem; opacity: 0.85;">Kích thước 210 x 297 mm - Phù hợp đóng khung tranh kỷ niệm</span>
+                </button>
+                
+                <button class="btn-secondary w-full" onclick="confirmPrintSize('a5')" style="padding: 14px; font-size: 1rem; background: var(--color-bg-cream); border: 1px solid var(--color-gold); color: var(--color-text-brown); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; height: auto; margin-top: 8px;">
+                    <strong style="font-size: 1.05rem; color: var(--color-gold-dark);">Khổ Giấy A5 (Nhỏ)</strong>
+                    <span style="font-size: 0.78rem; opacity: 0.85; color: var(--color-text-muted);">Kích thước 148 x 210 mm - Tiết kiệm, vừa vặn làm bưu thiếp tay</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 9. QR SHARE CARD VIEWER MODAL -->
+    <div id="qr-share-viewer-modal" class="modal-overlay hidden">
+        <div class="modal-card large-modal luxury-border glass-panel" style="max-width: 680px;">
+            <div class="modal-header">
+                <h3 class="modal-title" id="qr-share-title">Thiệp Ký Ức Gia Đình</h3>
+                <button class="modal-close-btn" onclick="closeQRShareViewer()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="saved-main-content" style="flex-direction: column; gap: 20px;">
+                    <div class="preview-center-card" style="margin-bottom: 0;">
+                        <!-- Left Side: Image Preview -->
+                        <div class="preview-left-side">
+                            <div class="preview-image-wrapper">
+                                <img id="qr-share-img" src="" alt="Family memory" class="preview-main-img">
+                                <div class="preview-date-badge">
+                                    <span class="date-tag" id="qr-share-date"></span>
+                                    <span class="time-tag" id="qr-share-time"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Right Side: Message text and Audio Playback -->
+                        <div class="preview-right-side">
+                            <div class="written-message-preview">
+                                <svg class="quotes-icon" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.988zm-12 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.154c-2.433.914-3.996 3.635-3.996 5.846h3.999v10h-9.999z"/>
+                                </svg>
+                                <p class="message-typography" id="qr-share-text" style="font-size: 1.1rem; line-height: 1.8; font-family: 'Playfair Display', serif;"></p>
+                            </div>
+                            <!-- Audio playback component -->
+                            <div class="audio-playback-container hidden" id="qr-share-audio-container" style="margin-top: 15px;">
+                                <button class="audio-play-btn" id="qr-share-audio-btn" onclick="toggleQRShareAudio()">
+                                    <svg class="play-icon" viewBox="0 0 24 24" fill="currentColor" id="qr-share-play-icon">
+                                        <polygon points="5 3 19 12 5 21 5 3"/>
+                                    </svg>
+                                    <svg class="pause-icon hidden" viewBox="0 0 24 24" fill="currentColor" id="qr-share-pause-icon">
+                                        <rect x="6" y="4" width="4" height="16"/>
+                                        <rect x="14" y="4" width="4" height="16"/>
+                                    </svg>
+                                </button>
+                                <span class="audio-duration" id="qr-share-audio-duration" style="font-weight: bold; margin-left: 10px; color: var(--color-gold);">Nghe giọng nói gia đình</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="sidebar-section text-center" style="background: rgba(214,175,55,0.05); padding: 15px; border-radius: 8px;">
+                        <span class="gold-text" style="font-weight: bold; font-size: 1rem;" id="qr-share-family-tag">Gia đình trân quý</span>
+                        <p class="subtle-caption mt-1">Ký ức này được bảo tồn vĩnh hằng trên Cây Hằng Hữu.</p>
+                        <button class="btn-primary btn-small mt-2" onclick="closeQRShareViewer()">Truy cập Trang chủ Lời Chúc 50 Năm</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Responsive Bottom Navigation Tab Bar for Mobile Devices -->
+
+    <div id="mobile-bottom-nav" class="mobile-bottom-nav hidden">
+        <button class="mobile-nav-item active" onclick="switchView('landing-view')">
+            <span class="mobile-nav-icon">🏡</span>
+            <span class="mobile-nav-text">Trang chủ</span>
+        </button>
+        <button class="mobile-nav-item" onclick="switchView('recording-view')">
+            <span class="mobile-nav-icon">⏳</span>
+            <span class="mobile-nav-text">Capsule</span>
+        </button>
+        <button class="mobile-nav-item" onclick="switchView('tree-view')">
+            <span class="mobile-nav-icon">🌳</span>
+            <span class="mobile-nav-text">Cây Ký Ức</span>
+        </button>
+        <button class="mobile-nav-item" onclick="switchView('archive-view')">
+            <span class="mobile-nav-icon">📦</span>
+            <span class="mobile-nav-text">Kho Ký Ức</span>
+        </button>
+    </div>
+
+    <!-- ----------------------------------------- -->
+    <!-- PRINTABLE TEMPLATE CONTAINER (OFFSCREEN)  -->
+    <!-- ----------------------------------------- -->
+    <div id="printable-thiep-container" class="printable-thiep-container">
+        <!-- Renders a spectacular vintage card when window.print() is fired -->
+    </div>
+
+    <!-- Hidden HTML5 Audio Element for Background Music -->
+    <audio id="ambient-audio-player" loop></audio>
+
+    <!-- Vanilla Javascript Logic File -->
+    <script src="app.js?v=1.1.0"></script>
+</body>
+</html>
