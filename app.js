@@ -2599,19 +2599,31 @@ async function downloadMemoryPDF(memoryId) {
         return;
     }
     
+    // Check if there is a valid captured or uploaded photo in the memory
+    const hasValidPhoto = memory.photoUrl && 
+                          memory.photoUrl !== 'default_keepsake.png' && 
+                          memory.photoUrl.trim() !== '' && 
+                          !memory.photoUrl.startsWith('default_keepsake');
+
     // Compile print frame structure (same as print)
     const card = document.createElement('div');
-    card.className = 'thiep-card';
+    card.className = `thiep-card theme-${appState.selectedPrintTheme || 'butterfly'} ${hasValidPhoto ? 'has-photo' : 'no-photo'}`;
+    
+    // Fetch high-fidelity thematic SVG ornaments matching the design language of the web
+    const themeOrnaments = getPrintThemeSVG(appState.selectedPrintTheme || 'butterfly');
     
     card.innerHTML = `
+        ${themeOrnaments}
         <div class="thiep-header">
             <div class="thiep-title">Lời Chúc 50 Năm</div>
             <div class="thiep-tagline">"Ký ức gia tộc là di sản ngàn đời"</div>
         </div>
-        <div class="thiep-body">
+        <div class="thiep-body ${hasValidPhoto ? 'layout-split' : 'layout-full'}">
+            ${hasValidPhoto ? `
             <div class="thiep-image-box">
-                <img src="${memory.photoUrl}" alt="Family print frame" class="thiep-img" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1511895426328-dc8714191300?auto=format&fit=crop&w=800&q=80';">
+                <img src="${memory.photoUrl}" alt="Family print frame" class="thiep-img">
             </div>
+            ` : ''}
             <div class="thiep-message-box">
                 <div class="thiep-message-text">"${memory.text}"</div>
             </div>
