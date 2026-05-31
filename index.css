@@ -2428,11 +2428,60 @@ h1, h2, h3, h4, .logo-text, .message-typography {
         box-sizing: border-box !important;
     }
 
-    /* Hide ALL decorative borders, taglines, bottom rows, and QR codes */
+    /* Hide ALL decorative borders, taglines, and metadata text but keep the QR code slot */
     .theme-ornaments,
     .thiep-header,
-    .thiep-bottom-row {
+    .thiep-meta-info {
         display: none !important;
+    }
+
+    .thiep-bottom-row {
+        position: absolute !important;
+        display: flex !important;
+        justify-content: flex-end !important;
+        align-items: flex-end !important;
+        z-index: 20 !important;
+        background: transparent !important;
+        border: none !important;
+    }
+
+    body.print-size-a4 .thiep-bottom-row {
+        bottom: 22mm !important;
+        right: 20mm !important;
+        left: auto !important;
+        width: auto !important;
+    }
+
+    body.print-size-a5 .thiep-bottom-row {
+        bottom: 12mm !important;
+        right: 10mm !important;
+        left: auto !important;
+        width: auto !important;
+    }
+
+    .thiep-qr-box {
+        display: block !important;
+        background: #ffffff !important;
+        border: 1px solid #4a3b32 !important;
+        padding: 4px !important;
+        box-sizing: border-box !important;
+    }
+
+    body.print-size-a4 .thiep-qr-box {
+        width: 80px !important;
+        height: 80px !important;
+    }
+
+    body.print-size-a5 .thiep-qr-box {
+        width: 60px !important;
+        height: 60px !important;
+    }
+
+    .thiep-qr-box img,
+    .thiep-qr-box canvas {
+        width: 100% !important;
+        height: 100% !important;
+        display: block !important;
     }
 
     /* Center core content block */
@@ -2937,8 +2986,37 @@ h1, h2, h3, h4, .logo-text, .message-typography {
 
 .printable-thiep-container .theme-ornaments,
 .printable-thiep-container .thiep-header,
+.printable-thiep-container .thiep-meta-info {
+    display: none !important;
+}
+
 .printable-thiep-container .thiep-bottom-row {
-    display: none !important; /* Always hide decorative elements in the print/PDF container! */
+    position: absolute !important;
+    bottom: 22mm !important;
+    right: 20mm !important;
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: flex-end !important;
+    z-index: 20 !important;
+    background: transparent !important;
+    border: none !important;
+}
+
+.printable-thiep-container .thiep-qr-box {
+    display: block !important;
+    background: #ffffff !important;
+    border: 1px solid #4a3b32 !important;
+    padding: 4px !important;
+    width: 80px !important;
+    height: 80px !important;
+    box-sizing: border-box !important;
+}
+
+.printable-thiep-container .thiep-qr-box img,
+.printable-thiep-container .thiep-qr-box canvas {
+    width: 100% !important;
+    height: 100% !important;
+    display: block !important;
 }
 
 .printable-thiep-container .thiep-body {

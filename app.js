@@ -727,7 +727,7 @@ function selectTemplateSize(sizeName, element) {
 function downloadSelectedTemplate() {
     const templateName = appState.selectedTemplateToPrint || 'eden';
     const link = document.createElement('a');
-    link.href = `templates/${templateName}.png`;
+    link.href = `${templateName}.png`;
     link.download = `Mau_Thiep_${templateName.charAt(0).toUpperCase() + templateName.slice(1)}.png`;
     document.body.appendChild(link);
     link.click();
@@ -742,7 +742,7 @@ async function printEmptyTemplate() {
     
     const container = document.getElementById('printable-template-only-container');
     if (!container) return;
-    container.innerHTML = `<img src="templates/${templateName}.png" alt="Empty Template Color">`;
+    container.innerHTML = `<img src="${templateName}.png" alt="Empty Template Color">`;
     
     // Add print orientation and empty template classes to body
     document.body.classList.remove('print-size-a4', 'print-size-a5', 'print-orientation-landscape', 'print-orientation-portrait', 'print-template-only');
@@ -2769,7 +2769,7 @@ async function downloadMemoryPDF(memoryId) {
                           memory.photoUrl.trim() !== '' && 
                           !memory.photoUrl.startsWith('default_keepsake');
 
-    // Compile print frame structure (simplified blank centered for preprinted sheets overprint)
+    // Compile print frame structure (simplified blank centered for preprinted sheets overprint, with QR code)
     const card = document.createElement('div');
     card.className = `thiep-card theme-blank ${hasValidPhoto ? 'has-photo' : 'no-photo'}`;
     
@@ -2784,9 +2784,31 @@ async function downloadMemoryPDF(memoryId) {
                 <div class="thiep-message-text">"${memory.text}"</div>
             </div>
         </div>
+        <div class="thiep-bottom-row">
+            <div class="thiep-meta-info" style="display: none;"></div>
+            <div class="thiep-qr-box" id="thiep-qr-pdf-node"></div>
+        </div>
     `;
     
     printableNode.appendChild(card);
+    
+    // Generate QR code offline-first
+    let uniqueLink = window.location.href.split('?')[0];
+    uniqueLink += `?memoryId=${memory.id}`;
+    uniqueLink += `&text=${encodeURIComponent(memory.text)}`;
+    uniqueLink += `&date=${memory.date}`;
+    uniqueLink += `&time=${memory.time}`;
+    if (appState.currentUser) {
+        uniqueLink += `&family=${encodeURIComponent(appState.currentUser.familyName)}`;
+    }
+    if (memory.photoUrl && !memory.photoUrl.startsWith('data:image')) {
+        uniqueLink += `&photo=${encodeURIComponent(memory.photoUrl)}`;
+    }
+
+    const qrBox = document.getElementById('thiep-qr-pdf-node');
+    if (qrBox) {
+        await generateQRCode(qrBox, uniqueLink, 80);
+    }
     
     await waitForImagesToLoad(printableNode);
     
