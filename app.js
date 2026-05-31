@@ -1199,7 +1199,7 @@ async function triggerCardPrinting(memoryId = null) {
     
     // Compile gorgeous print frame structure
     const card = document.createElement('div');
-    card.className = 'thiep-card';
+    card.className = `thiep-card theme-${appState.selectedPrintTheme || 'butterfly'}`;
     
     card.innerHTML = `
         <div class="thiep-header">
@@ -1254,8 +1254,26 @@ async function triggerCardPrinting(memoryId = null) {
 // Global variable to store active target keepsake for printing
 let currentPrintMemoryId = null;
 
+// Initialize printing choices in appState if not defined
+appState.selectedPrintTheme = 'butterfly';
+appState.selectedPrintSize = 'a4';
+
 function showPrintSizeModal(memoryId = null) {
     currentPrintMemoryId = memoryId;
+    
+    // Reset selection styles in modal to default (butterfly and A4)
+    appState.selectedPrintTheme = 'butterfly';
+    appState.selectedPrintSize = 'a4';
+    
+    document.querySelectorAll('.theme-select-card').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.size-select-card').forEach(c => c.classList.remove('active'));
+    
+    const defaultThemeBtn = document.getElementById('theme-btn-butterfly');
+    if (defaultThemeBtn) defaultThemeBtn.classList.add('active');
+    
+    const defaultSizeBtn = document.getElementById('size-btn-a4');
+    if (defaultSizeBtn) defaultSizeBtn.classList.add('active');
+    
     const modal = document.getElementById('print-size-modal');
     if (modal) {
         modal.classList.remove('hidden');
@@ -1267,6 +1285,26 @@ function closePrintSizeModal() {
     if (modal) {
         modal.classList.add('hidden');
     }
+}
+
+function selectPrintTheme(themeName, element) {
+    appState.selectedPrintTheme = themeName;
+    document.querySelectorAll('.theme-select-card').forEach(c => c.classList.remove('active'));
+    if (element) {
+        element.classList.add('active');
+    }
+}
+
+function selectPrintSize(sizeName, element) {
+    appState.selectedPrintSize = sizeName;
+    document.querySelectorAll('.size-select-card').forEach(c => c.classList.remove('active'));
+    if (element) {
+        element.classList.add('active');
+    }
+}
+
+async function executeKeepsakePrint() {
+    await confirmPrintSize(appState.selectedPrintSize);
 }
 
 async function confirmPrintSize(size) {

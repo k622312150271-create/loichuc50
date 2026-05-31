@@ -842,11 +842,13 @@
         </div>
     </div>
 
-    <!-- 10. PRINT SIZE SELECTION MODAL -->
+    <!-- 10. PRINT SIZE & TEMPLATE SELECTION MODAL -->
     <div id="print-size-modal" class="modal-overlay hidden" onclick="closePrintSizeModal()">
-        <div class="modal-card small-modal luxury-border glass-panel" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <h3 class="modal-title">Chọn Khổ Thiệp In</h3>
+        <div class="modal-card luxury-border glass-panel" style="max-width: 620px;" onclick="event.stopPropagation()">
+            <div class="modal-header" style="background: rgba(214,175,55,0.04);">
+                <h3 class="modal-title" style="font-weight: bold; display: flex; align-items: center; gap: 8px;">
+                    <span>🎨 Thiết Kế Bản In Độc Bản</span>
+                </h3>
                 <button class="modal-close-btn" onclick="closePrintSizeModal()">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-6 h-6">
                         <line x1="18" y1="6" x2="6" y2="18"/>
@@ -854,20 +856,78 @@
                     </svg>
                 </button>
             </div>
-            <div class="modal-body text-center" style="display: flex; flex-direction: column; gap: 16px; padding: 24px;">
-                <div style="font-size: 3rem; margin-bottom: 8px;">🖨️</div>
-                <p class="modal-subtle-hint" style="margin-bottom: 12px; font-size: 0.9rem; line-height: 1.5;">
-                    Vui lòng chọn kích thước thiệp in phù hợp để tối ưu hoá căn chỉnh vừa khít 1 trang giấy, không bị tràn sang trang thứ hai.
-                </p>
+            <div class="modal-body" style="padding: 24px; display: flex; flex-direction: column; gap: 24px;">
                 
-                <button class="btn-primary w-full" onclick="confirmPrintSize('a4')" style="padding: 14px; font-size: 1rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; height: auto;">
-                    <strong style="font-size: 1.05rem;">Khổ Giấy A4 (Lớn)</strong>
-                    <span style="font-size: 0.78rem; opacity: 0.85;">Kích thước 210 x 297 mm - Phù hợp đóng khung tranh kỷ niệm</span>
-                </button>
-                
-                <button class="btn-secondary w-full" onclick="confirmPrintSize('a5')" style="padding: 14px; font-size: 1rem; background: var(--color-bg-cream); border: 1px solid var(--color-gold); color: var(--color-text-brown); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; height: auto; margin-top: 8px;">
-                    <strong style="font-size: 1.05rem; color: var(--color-gold-dark);">Khổ Giấy A5 (Nhỏ)</strong>
-                    <span style="font-size: 0.78rem; opacity: 0.85; color: var(--color-text-muted);">Kích thước 148 x 210 mm - Tiết kiệm, vừa vặn làm bưu thiếp tay</span>
+                <!-- Section 1: Select Keepsake Theme -->
+                <div>
+                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--color-text-brown); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                        <span>1. Chọn Mẫu Tem Trang Trí</span>
+                    </h4>
+                    <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 12px;">Trang trí tinh xảo dọc khung viền và lề giấy. Ruột thiệp giữ trắng tinh khôi để hiển thị ảnh & chữ rõ nét nhất.</p>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px;">
+                        <!-- Theme 1: Butterfly -->
+                        <div class="theme-select-card active" onclick="selectPrintTheme('butterfly', this)" id="theme-btn-butterfly">
+                            <span class="theme-card-icon">🦋</span>
+                            <strong class="theme-card-name">Bướm Ký Ức</strong>
+                            <span class="theme-card-desc">Crystalline bướm tinh xảo floating thủy tinh thanh khiết</span>
+                        </div>
+                        
+                        <!-- Theme 2: Eden -->
+                        <div class="theme-select-card" onclick="selectPrintTheme('eden', this)" id="theme-btn-eden">
+                            <span class="theme-card-icon">🌿</span>
+                            <strong class="theme-card-name">Vườn Địa Đàng</strong>
+                            <span class="theme-card-desc">Dây leo organic, lá vàng kim lãng mạn cổ điển</span>
+                        </div>
+                        
+                        <!-- Theme 3: Royal -->
+                        <div class="theme-select-card" onclick="selectPrintTheme('royal', this)" id="theme-btn-royal">
+                            <span class="theme-card-icon">⚜️</span>
+                            <strong class="theme-card-name">Hoàng Gia</strong>
+                            <span class="theme-card-desc">Hoa văn Baroque quý tộc, góc thư họa cổ kính</span>
+                        </div>
+
+                        <!-- Theme 4: Minimal -->
+                        <div class="theme-select-card" onclick="selectPrintTheme('minimal', this)" id="theme-btn-minimal">
+                            <span class="theme-card-icon">📐</span>
+                            <strong class="theme-card-name">Tối Giản Gold</strong>
+                            <span class="theme-card-desc">Đường chỉ mảnh sang trọng tinh tế phong cách đương đại</span>
+                        </div>
+
+                        <!-- Theme 5: Firefly -->
+                        <div class="theme-select-card" onclick="selectPrintTheme('firefly', this)" id="theme-btn-firefly">
+                            <span class="theme-card-icon">✨</span>
+                            <strong class="theme-card-name">Đom Đóm Đêm</strong>
+                            <span class="theme-card-desc">Đốm sáng phát quang organic huyền ảo, mơ mộng</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Section 2: Select Paper Size -->
+                <div>
+                    <h4 style="font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--color-text-brown); margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                        <span>2. Chọn Khổ Giấy Kỷ Vật</span>
+                    </h4>
+                    <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: 12px;">Hệ thống sẽ tự căn chỉnh bố cục để bản in vừa khít 100% trong trang giấy mà không bị tràn trang.</p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+                        <!-- Size A4 -->
+                        <div class="size-select-card active" onclick="selectPrintSize('a4', this)" id="size-btn-a4">
+                            <strong style="font-size: 1.05rem; display: block; color: var(--color-gold-dark);">Khổ A4 (Lớn)</strong>
+                            <span style="font-size: 0.76rem; opacity: 0.85; margin-top: 4px; display: block;">210 x 297 mm • Đóng khung gỗ kỷ niệm gia đình</span>
+                        </div>
+                        
+                        <!-- Size A5 -->
+                        <div class="size-select-card" onclick="selectPrintSize('a5', this)" id="size-btn-a5">
+                            <strong style="font-size: 1.05rem; display: block; color: var(--color-text-brown);">Khổ A5 (Nhỏ)</strong>
+                            <span style="font-size: 0.76rem; opacity: 0.85; margin-top: 4px; display: block;">148 x 210 mm • Gọn gàng làm bưu thiếp tay tặng quà</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Print Action Button -->
+                <button class="btn-primary w-full" onclick="executeKeepsakePrint()" style="padding: 16px; font-size: 1.1rem; font-weight: bold; background: linear-gradient(135deg, #d4af37 0%, #aa7c11 100%); color: #fff; box-shadow: var(--shadow-gold-glow); display: flex; align-items: center; justify-content: center; gap: 8px; border-radius: 8px; border: none; height: auto;">
+                    <span>🖨️ Tiến Hành In Kỷ Vật Độc Bản</span>
                 </button>
             </div>
         </div>

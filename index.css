@@ -2315,6 +2315,53 @@ h1, h2, h3, h4, .logo-text, .message-typography {
     transform: translateX(-50%) translateY(0);
 }
 
+/* Printable Theme & Size Selector UI inside Modal */
+.theme-select-card, .size-select-card {
+    background-color: var(--color-bg-cream);
+    border: 1px solid rgba(74, 59, 50, 0.1);
+    border-radius: 8px;
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    height: 100%;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.theme-select-card:hover, .size-select-card:hover {
+    border-color: var(--color-gold);
+    background-color: rgba(212, 175, 55, 0.04);
+}
+
+.theme-select-card.active, .size-select-card.active {
+    border-color: var(--color-gold-dark) !important;
+    background-color: rgba(212, 175, 55, 0.08) !important;
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
+}
+
+.theme-card-icon {
+    font-size: 1.6rem;
+    margin-bottom: 2px;
+}
+
+.theme-card-name {
+    font-size: 0.82rem;
+    color: var(--color-text-brown);
+    font-weight: 700;
+}
+
+.theme-card-desc {
+    font-size: 0.68rem;
+    color: var(--color-text-muted);
+    line-height: 1.25;
+}
+
 /* --------------------------------------------------------------------------
    PRINT-ONLY CSS PRESETS (@media print)
    -------------------------------------------------------------------------- */
@@ -2351,7 +2398,7 @@ h1, h2, h3, h4, .logo-text, .message-typography {
     }
 
     .thiep-card {
-        background-color: #FAF6F0 !important;
+        background-color: #ffffff !important; /* Keep inner container fully white as requested */
         border-radius: 0 !important;
         box-shadow: none !important;
         margin: 0 auto !important;
@@ -2366,22 +2413,172 @@ h1, h2, h3, h4, .logo-text, .message-typography {
 
     /* SPECIFIC A4 FIT LAYOUT (Perfect fit for 1 page) */
     body.print-size-a4 .thiep-card {
-        border: 8px double #AA7C11 !important;
-        padding: 40mm 20mm !important;
+        padding: 35mm 20mm !important;
         width: 190mm !important;
         height: 277mm !important;
         justify-content: space-between !important;
-        gap: 40px !important;
+        gap: 30px !important;
     }
 
     /* SPECIFIC A5 FIT LAYOUT (Perfect fit for 1 page) */
     body.print-size-a5 .thiep-card {
-        border: 4px double #AA7C11 !important;
         padding: 20mm 12mm !important;
         width: 132mm !important;
         height: 194mm !important;
         justify-content: space-between !important;
         gap: 15px !important;
+    }
+
+    /* ----------------------------------------- */
+    /* THEME 1: BUTTERFLY (Bướm Tinh Khôi)       */
+    /* ----------------------------------------- */
+    .thiep-card.theme-butterfly {
+        border: 6px double #3a86c8 !important; /* Soft crystalline blue-gold frame */
+        box-shadow: inset 0 0 15px rgba(58, 134, 200, 0.1) !important;
+    }
+    body.print-size-a4 .thiep-card.theme-butterfly::before {
+        content: "🦋" !important;
+        position: absolute !important;
+        top: 15mm !important;
+        right: 12mm !important;
+        font-size: 3rem !important;
+        opacity: 0.8 !important;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)) !important;
+    }
+    body.print-size-a4 .thiep-card.theme-butterfly::after {
+        content: "🦋" !important;
+        position: absolute !important;
+        bottom: 15mm !important;
+        left: 12mm !important;
+        font-size: 2.2rem !important;
+        opacity: 0.75 !important;
+        transform: rotate(-25deg) !important;
+    }
+    body.print-size-a5 .thiep-card.theme-butterfly::before {
+        content: "🦋" !important;
+        position: absolute !important;
+        top: 8mm !important;
+        right: 6mm !important;
+        font-size: 2rem !important;
+        opacity: 0.8 !important;
+    }
+    body.print-size-a5 .thiep-card.theme-butterfly::after {
+        content: "🦋" !important;
+        position: absolute !important;
+        bottom: 8mm !important;
+        left: 6mm !important;
+        font-size: 1.5rem !important;
+        opacity: 0.75 !important;
+    }
+
+    /* ----------------------------------------- */
+    /* THEME 2: EDEN (Vườn Địa Đàng)             */
+    /* ----------------------------------------- */
+    .thiep-card.theme-eden {
+        border: 6px double #27ae60 !important; /* Emerald green-gold frame */
+    }
+    body.print-size-a4 .thiep-card.theme-eden::before {
+        content: "🌿" !important;
+        position: absolute !important;
+        top: 12mm !important;
+        left: 15mm !important;
+        font-size: 3.5rem !important;
+        opacity: 0.85 !important;
+    }
+    body.print-size-a4 .thiep-card.theme-eden::after {
+        content: "🌹" !important;
+        position: absolute !important;
+        bottom: 12mm !important;
+        right: 15mm !important;
+        font-size: 3rem !important;
+        opacity: 0.85 !important;
+    }
+    body.print-size-a5 .thiep-card.theme-eden::before {
+        content: "🌿" !important;
+        position: absolute !important;
+        top: 8mm !important;
+        left: 8mm !important;
+        font-size: 2.2rem !important;
+        opacity: 0.85 !important;
+    }
+    body.print-size-a5 .thiep-card.theme-eden::after {
+        content: "🌹" !important;
+        position: absolute !important;
+        bottom: 8mm !important;
+        right: 8mm !important;
+        font-size: 2rem !important;
+        opacity: 0.85 !important;
+    }
+
+    /* ----------------------------------------- */
+    /* THEME 3: ROYAL (Hoàng Gia Cổ Điển)        */
+    /* ----------------------------------------- */
+    .thiep-card.theme-royal {
+        border: 12px double #AA7C11 !important; /* Thick gold Victorian frame */
+    }
+    .thiep-card.theme-royal::before {
+        content: "⚜️" !important;
+        position: absolute !important;
+        top: 8mm !important;
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        font-size: 2.5rem !important;
+        color: #AA7C11 !important;
+        opacity: 0.9 !important;
+    }
+
+    /* ----------------------------------------- */
+    /* THEME 4: MINIMAL (Tối Giản Gold)          */
+    /* ----------------------------------------- */
+    .thiep-card.theme-minimal {
+        border: 1.5px solid #AA7C11 !important; /* Sleek elegant thin golden line */
+        outline: 1px solid rgba(170, 124, 17, 0.4) !important;
+        outline-offset: -8px !important;
+    }
+
+    /* ----------------------------------------- */
+    /* THEME 5: FIREFLY (Đom Đóm Đêm)            */
+    /* ----------------------------------------- */
+    .thiep-card.theme-firefly {
+        border: 6px double #f1c40f !important; /* Golden glowing frame */
+        box-shadow: inset 0 0 20px rgba(241, 196, 15, 0.08) !important;
+    }
+    body.print-size-a4 .thiep-card.theme-firefly::before {
+        content: "✨" !important;
+        position: absolute !important;
+        top: 15mm !important;
+        left: 15mm !important;
+        font-size: 2.5rem !important;
+        color: #ffd700 !important;
+        text-shadow: 0 0 10px #ffd700 !important;
+        opacity: 0.85 !important;
+    }
+    body.print-size-a4 .thiep-card.theme-firefly::after {
+        content: "✨" !important;
+        position: absolute !important;
+        bottom: 15mm !important;
+        right: 15mm !important;
+        font-size: 2rem !important;
+        color: #ffd700 !important;
+        opacity: 0.85 !important;
+    }
+    body.print-size-a5 .thiep-card.theme-firefly::before {
+        content: "✨" !important;
+        position: absolute !important;
+        top: 8mm !important;
+        left: 8mm !important;
+        font-size: 1.8rem !important;
+        color: #ffd700 !important;
+        opacity: 0.85 !important;
+    }
+    body.print-size-a5 .thiep-card.theme-firefly::after {
+        content: "✨" !important;
+        position: absolute !important;
+        bottom: 8mm !important;
+        right: 8mm !important;
+        font-size: 1.4rem !important;
+        color: #ffd700 !important;
+        opacity: 0.85 !important;
     }
 
     /* Adjust sizing dynamically for A5 to keep it premium and single-page */
