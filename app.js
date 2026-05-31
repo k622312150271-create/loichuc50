@@ -1414,22 +1414,35 @@ let currentPrintMemoryId = null;
 // Initialize printing choices in appState if not defined
 appState.selectedPrintTheme = 'butterfly';
 appState.selectedPrintSize = 'a4';
+appState.selectedPrintOrientation = 'landscape';
 
 function showPrintSizeModal(memoryId = null) {
     currentPrintMemoryId = memoryId;
     
-    // Reset selection styles in modal to default (butterfly and A4)
-    appState.selectedPrintTheme = 'butterfly';
+    // Reset selection styles in modal to default (A4 and landscape)
     appState.selectedPrintSize = 'a4';
+    appState.selectedPrintOrientation = 'landscape';
     
-    document.querySelectorAll('.theme-select-card').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('.size-select-card').forEach(c => c.classList.remove('active'));
-    
-    const defaultThemeBtn = document.getElementById('theme-btn-butterfly');
-    if (defaultThemeBtn) defaultThemeBtn.classList.add('active');
+    document.querySelectorAll('.orientation-select-card').forEach(c => c.classList.remove('active'));
     
     const defaultSizeBtn = document.getElementById('size-btn-a4');
     if (defaultSizeBtn) defaultSizeBtn.classList.add('active');
+    
+    const defaultOrientationBtn = document.getElementById('orientation-btn-landscape');
+    if (defaultOrientationBtn) {
+        defaultOrientationBtn.classList.add('active');
+        defaultOrientationBtn.style.borderColor = 'var(--color-gold-dark)';
+        defaultOrientationBtn.style.background = 'rgba(214,175,55,0.03)';
+        defaultOrientationBtn.querySelector('strong').style.color = 'var(--color-gold-dark)';
+    }
+    
+    const portraitOrientationBtn = document.getElementById('orientation-btn-portrait');
+    if (portraitOrientationBtn) {
+        portraitOrientationBtn.style.borderColor = 'rgba(74, 59, 50, 0.15)';
+        portraitOrientationBtn.style.background = 'transparent';
+        portraitOrientationBtn.querySelector('strong').style.color = 'var(--color-text-brown)';
+    }
     
     const modal = document.getElementById('print-size-modal');
     if (modal) {
@@ -1442,6 +1455,25 @@ function closePrintSizeModal() {
     if (modal) {
         modal.classList.add('hidden');
     }
+}
+
+function selectPrintOrientation(orientationName, element) {
+    appState.selectedPrintOrientation = orientationName;
+    document.querySelectorAll('.orientation-select-card').forEach(c => c.classList.remove('active'));
+    if (element) {
+        element.classList.add('active');
+    }
+    document.querySelectorAll('.orientation-select-card').forEach(card => {
+        if (card.classList.contains('active')) {
+            card.style.borderColor = 'var(--color-gold-dark)';
+            card.style.background = 'rgba(214,175,55,0.03)';
+            card.querySelector('strong').style.color = 'var(--color-gold-dark)';
+        } else {
+            card.style.borderColor = 'rgba(74, 59, 50, 0.15)';
+            card.style.background = 'transparent';
+            card.querySelector('strong').style.color = 'var(--color-text-brown)';
+        }
+    });
 }
 
 function selectPrintTheme(themeName, element) {
@@ -1467,22 +1499,12 @@ async function executeKeepsakePrint() {
 async function confirmPrintSize(size) {
     closePrintSizeModal();
     
-    // Remove existing print size and theme classes from body
-    document.body.classList.remove('print-size-a4', 'print-size-a5', 'print-theme-eden-landscape', 'print-content-only');
+    // Remove existing print size and orientation classes from body
+    document.body.classList.remove('print-size-a4', 'print-size-a5', 'print-orientation-landscape', 'print-orientation-portrait');
     
-    // Add the selected size class
+    // Add the selected size and orientation classes
     document.body.classList.add(`print-size-${size}`);
-    
-    // Add the print theme landscape class if Eden is selected!
-    if (appState.selectedPrintTheme === 'eden') {
-        document.body.classList.add('print-theme-eden-landscape');
-    }
-    
-    // Add content-only class if checked
-    const printContentOnlyChecked = document.getElementById('checkbox-print-content-only')?.checked;
-    if (printContentOnlyChecked) {
-        document.body.classList.add('print-content-only');
-    }
+    document.body.classList.add(`print-orientation-${appState.selectedPrintOrientation || 'landscape'}`);
     
     // Inject dynamic @page size style to enforce correct paper format in print dialog
     let printStyleNode = document.getElementById('dynamic-print-page-style');
@@ -1492,20 +1514,11 @@ async function confirmPrintSize(size) {
         document.head.appendChild(printStyleNode);
     }
     
-    if (appState.selectedPrintTheme === 'eden') {
-        // Landscape orientation for Eden Garden!
-        if (size === 'a4') {
-            printStyleNode.innerHTML = `@media print { @page { size: A4 landscape; margin: 10mm; } }`;
-        } else if (size === 'a5') {
-            printStyleNode.innerHTML = `@media print { @page { size: A5 landscape; margin: 8mm; } }`;
-        }
-    } else {
-        // Portrait orientation for other themes
-        if (size === 'a4') {
-            printStyleNode.innerHTML = `@media print { @page { size: A4 portrait; margin: 10mm; } }`;
-        } else if (size === 'a5') {
-            printStyleNode.innerHTML = `@media print { @page { size: A5 portrait; margin: 8mm; } }`;
-        }
+    const orientation = appState.selectedPrintOrientation || 'landscape';
+    if (size === 'a4') {
+        printStyleNode.innerHTML = `@media print { @page { size: A4 ${orientation}; margin: 0; } }`;
+    } else if (size === 'a5') {
+        printStyleNode.innerHTML = `@media print { @page { size: A5 ${orientation}; margin: 0; } }`;
     }
     
     // Execute the actual printing
@@ -2626,19 +2639,11 @@ async function downloadMemoryPDF(memoryId) {
                           memory.photoUrl.trim() !== '' && 
                           !memory.photoUrl.startsWith('default_keepsake');
 
-    // Compile print frame structure (same as print)
+    // Compile print frame structure (simplified blank centered for preprinted sheets overprint)
     const card = document.createElement('div');
-    card.className = `thiep-card theme-${appState.selectedPrintTheme || 'butterfly'} ${hasValidPhoto ? 'has-photo' : 'no-photo'}`;
-    
-    // Fetch high-fidelity thematic SVG ornaments matching the design language of the web
-    const themeOrnaments = getPrintThemeSVG(appState.selectedPrintTheme || 'butterfly');
+    card.className = `thiep-card theme-blank ${hasValidPhoto ? 'has-photo' : 'no-photo'}`;
     
     card.innerHTML = `
-        ${themeOrnaments}
-        <div class="thiep-header">
-            <div class="thiep-title">Lời Chúc 50 Năm</div>
-            <div class="thiep-tagline">"Ký ức gia tộc là di sản ngàn đời"</div>
-        </div>
         <div class="thiep-body ${hasValidPhoto ? 'layout-split' : 'layout-full'}">
             ${hasValidPhoto ? `
             <div class="thiep-image-box">
@@ -2649,45 +2654,19 @@ async function downloadMemoryPDF(memoryId) {
                 <div class="thiep-message-text">"${memory.text}"</div>
             </div>
         </div>
-        <div class="thiep-bottom-row">
-            <div class="thiep-meta-info">
-                <strong>Gia đình:</strong> ${appState.currentUser ? appState.currentUser.familyName : "Dòng họ Nguyễn An"}<br>
-                <strong>Ngày gieo mầm:</strong> ${memory.date} lúc ${memory.time}<br>
-                <strong>Bảo lưu truyền đời bởi:</strong> Lời Chúc 50 Năm Capsule
-            </div>
-            <div class="thiep-qr-box" id="thiep-qr-pdf-node"></div>
-        </div>
     `;
     
     printableNode.appendChild(card);
     
-    // Generate QR code offline-first
-    let uniqueLink = window.location.href.split('?')[0];
-    uniqueLink += `?memoryId=${memory.id}`;
-    uniqueLink += `&text=${encodeURIComponent(memory.text)}`;
-    uniqueLink += `&date=${memory.date}`;
-    uniqueLink += `&time=${memory.time}`;
-    if (appState.currentUser) {
-        uniqueLink += `&family=${encodeURIComponent(appState.currentUser.familyName)}`;
-    }
-    if (memory.photoUrl && !memory.photoUrl.startsWith('data:image')) {
-        uniqueLink += `&photo=${encodeURIComponent(memory.photoUrl)}`;
-    }
-
-    const qrBox = document.getElementById('thiep-qr-pdf-node');
-    if (qrBox) {
-        await generateQRCode(qrBox, uniqueLink, 80);
-    }
-    
     await waitForImagesToLoad(printableNode);
     
-    // Convert to PDF using html2pdf.js
+    // Convert to PDF using html2pdf.js - configured for borderless centered landscape overprint
     const opt = {
-        margin:       10,
-        filename:     `loichuc50nam_thiep_${memory.id}.pdf`,
+        margin:       0,
+        filename:     `loichuc50nam_khung_chu_${memory.id}.pdf`,
         image:        { type: 'jpeg', quality: 0.98 },
         html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
     };
     
     // Trigger conversion and download
