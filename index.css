@@ -3113,11 +3113,11 @@ h1, h2, h3, h4, .logo-text, .message-typography {
 
     /* Stretch and bleed the empty template image to touch the exact edges of the sheet and cut off outer margins */
     body.print-template-only .printable-template-only-container img {
-        width: 100% !important;
-        height: 100% !important;
+        width: 102% !important;
+        height: 102% !important;
         position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
+        top: -1% !important;
+        left: -1% !important;
         object-fit: fill !important; /* Bleeds and snaps perfectly to the page boundary */
         margin: 0 !important;
         padding: 0 !important;

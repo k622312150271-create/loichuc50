@@ -852,10 +852,16 @@ async function printEmptyTemplate() {
     container.innerHTML = `<img src="${templateName}.png?v=1.2.0" alt="Empty Template Color">`;
     
     // Add print orientation and empty template classes to body
-    document.body.classList.remove('print-size-a4', 'print-size-a5', 'print-orientation-landscape', 'print-orientation-portrait', 'print-template-only');
+    document.body.classList.remove(
+        'print-size-a4', 'print-size-a5', 
+        'print-orientation-landscape', 'print-orientation-portrait', 
+        'print-template-only', 'print-template-eden', 
+        'print-template-butterfly', 'print-template-royal'
+    );
     document.body.classList.add(`print-size-${sizeName}`);
     document.body.classList.add(`print-orientation-${orientation}`);
     document.body.classList.add('print-template-only');
+    document.body.classList.add(`print-template-${templateName}`);
     
     // Inject dynamic @page style to force orientation and zero margins
     let printStyleNode = document.getElementById('dynamic-print-page-style');
@@ -875,7 +881,10 @@ async function printEmptyTemplate() {
     
     // Cleanup class after print dialog is closed
     setTimeout(() => {
-        document.body.classList.remove('print-template-only');
+        document.body.classList.remove(
+            'print-template-only', 'print-template-eden', 
+            'print-template-butterfly', 'print-template-royal'
+        );
     }, 1000);
 }
 
