@@ -795,7 +795,7 @@ function downloadSelectedTemplate() {
     // Load the image to render onto a canvas for high-quality, perfectly-oriented PNG download
     const img = new Image();
     img.crossOrigin = 'anonymous';
-    img.src = `${templateName}.png`;
+    img.src = `${templateName}.png?v=1.2.0`;
     img.onload = function() {
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
@@ -831,7 +831,7 @@ function downloadSelectedTemplate() {
     img.onerror = function() {
         // Fallback to direct raw file download if canvas rendering fails
         const link = document.createElement('a');
-        link.href = `${templateName}.png`;
+        link.href = `${templateName}.png?v=1.2.0`;
         link.download = `Mau_Thiep_${templateName.charAt(0).toUpperCase() + templateName.slice(1)}_Goc.png`;
         document.body.appendChild(link);
         link.click();
@@ -849,7 +849,7 @@ async function printEmptyTemplate() {
     
     const container = document.getElementById('printable-template-only-container');
     if (!container) return;
-    container.innerHTML = `<img src="${templateName}.png" alt="Empty Template Color">`;
+    container.innerHTML = `<img src="${templateName}.png?v=1.2.0" alt="Empty Template Color">`;
     
     // Add print orientation and empty template classes to body
     document.body.classList.remove('print-size-a4', 'print-size-a5', 'print-orientation-landscape', 'print-orientation-portrait', 'print-template-only');
