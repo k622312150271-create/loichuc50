@@ -2446,15 +2446,15 @@ h1, h2, h3, h4, .logo-text, .message-typography {
     }
 
     body.print-size-a4 .thiep-bottom-row {
-        bottom: 35mm !important;
-        right: 32mm !important;
+        bottom: 45mm !important;
+        right: 42mm !important;
         left: auto !important;
         width: auto !important;
     }
 
     body.print-size-a5 .thiep-bottom-row {
-        bottom: 24mm !important;
-        right: 22mm !important;
+        bottom: 32mm !important;
+        right: 30mm !important;
         left: auto !important;
         width: auto !important;
     }
@@ -3102,22 +3102,22 @@ h1, h2, h3, h4, .logo-text, .message-typography {
         position: absolute !important;
         top: 0 !important;
         left: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
+        width: 100% !important;
+        height: 100% !important;
         margin: 0 !important;
         padding: 0 !important;
         z-index: 999999 !important;
         background-color: #ffffff !important;
-        overflow: hidden !important; /* Crops the outer 3% bleed margin */
+        overflow: hidden !important;
     }
 
     /* Stretch and bleed the empty template image to touch the exact edges of the sheet and cut off outer margins */
     body.print-template-only .printable-template-only-container img {
-        width: 106% !important;
-        height: 106% !important;
+        width: 100% !important;
+        height: 100% !important;
         position: absolute !important;
-        top: -3% !important;
-        left: -3% !important;
+        top: 0 !important;
+        left: 0 !important;
         object-fit: fill !important; /* Bleeds and snaps perfectly to the page boundary */
         margin: 0 !important;
         padding: 0 !important;
