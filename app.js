@@ -774,69 +774,70 @@ function downloadSelectedTemplate() {
     const sizeName = appState.selectedTemplateSize || 'a4';
     const orientation = appState.selectedTemplateOrientation || 'landscape';
     
-    // Determine sheet dimensions in mm
-    let widthMm, heightMm;
-    if (sizeName === 'a4') {
-        widthMm = orientation === 'landscape' ? 297 : 210;
-        heightMm = orientation === 'landscape' ? 210 : 297;
-    } else { // a5
-        widthMm = orientation === 'landscape' ? 210 : 148;
-        heightMm = orientation === 'landscape' ? 148 : 210;
-    }
-    
-    // Create offscreen container styled precisely for borderless PDF page export with bleed cropping
-    const card = document.createElement('div');
-    card.style.width = `${widthMm}mm`;
-    card.style.height = `${heightMm}mm`;
-    card.style.margin = '0';
-    card.style.padding = '0';
-    card.style.position = 'absolute';
-    card.style.top = '-9999px';
-    card.style.left = '-9999px';
-    card.style.boxSizing = 'border-box';
-    card.style.backgroundColor = '#ffffff';
-    card.style.overflow = 'hidden';
-    
-    // Create image with a 6% bleed scaling to push white borders outside the page boundaries
-    card.innerHTML = `
-        <img src="${templateName}.png" style="
-            width: 106% !important; 
-            height: 106% !important; 
-            position: absolute !important;
-            top: -3% !important; 
-            left: -3% !important; 
-            object-fit: fill !important; 
-            display: block; 
-            margin: 0; 
-            padding: 0;
-        ">
-    `;
-    
-    document.body.appendChild(card);
-    
-    // Configure html2pdf for zero margin PDF matching paper size and orientation
-    const opt = {
-        margin:       0,
-        filename:     `Khung_Mau_${templateName.toUpperCase()}_${sizeName.toUpperCase()}_${orientation.toUpperCase()}_Sat_Vien.pdf`,
-        image:        { type: 'jpeg', quality: 0.98 },
-        html2canvas:  { scale: 2, useCORS: true },
-        jsPDF:        { unit: 'mm', format: sizeName, orientation: orientation }
+    // Create a beautiful premium overlay alert to inform user that high-res image generation has started
+    const alertOverlay = document.createElement('div');
+    alertOverlay.style.position = 'fixed';
+    alertOverlay.style.top = '0';
+    alertOverlay.style.left = '0';
+    alertOverlay.style.width = '100%';
+    alertOverlay.style.height = '100%';
+    alertOverlay.style.backgroundColor = 'rgba(0,0,0,0.5)';
+    alertOverlay.style.zIndex = '999999';
+    alertOverlay.style.display = 'flex';
+    alertOverlay.style.alignItems = 'center';
+    alertOverlay.style.justifyContent = 'center';
+    alertOverlay.style.color = '#fff';
+    alertOverlay.style.fontFamily = "'Playfair Display', serif";
+    alertOverlay.style.fontSize = '1.2rem';
+    alertOverlay.innerHTML = `<div style="background:#4a3b32; padding:20px 40px; border-radius:10px; border:2px solid #d4af37; text-align:center;">⌛ Đang khởi tạo ảnh khung độ phân giải cao...</div>`;
+    document.body.appendChild(alertOverlay);
+
+    // Load the image to render onto a canvas for high-quality, perfectly-oriented PNG download
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.src = `${templateName}.png`;
+    img.onload = function() {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Define high-resolution output dimensions (A4 standard at 300 DPI is approx 3508 x 2480 pixels)
+        const baseWidth = 3508;
+        const baseHeight = 2480;
+        
+        if (orientation === 'portrait') {
+            // Swap width and height for physical portrait layout
+            canvas.width = baseHeight;
+            canvas.height = baseWidth;
+            
+            // Rotate canvas 90 degrees to physically re-orient the landscape image into portrait
+            ctx.translate(canvas.width / 2, canvas.height / 2);
+            ctx.rotate(90 * Math.PI / 180);
+            ctx.drawImage(img, -baseWidth / 2, -baseHeight / 2, baseWidth, baseHeight);
+        } else {
+            canvas.width = baseWidth;
+            canvas.height = baseHeight;
+            ctx.drawImage(img, 0, 0, baseWidth, baseHeight);
+        }
+        
+        // Trigger high-quality PNG download
+        const link = document.createElement('a');
+        link.download = `Khung_Mau_${templateName.toUpperCase()}_${sizeName.toUpperCase()}_${orientation.toUpperCase()}.png`;
+        link.href = canvas.toDataURL('image/png');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        document.body.removeChild(alertOverlay);
     };
-    
-    if (typeof html2pdf !== 'undefined') {
-        html2pdf().set(opt).from(card).save().then(() => {
-            document.body.removeChild(card);
-        });
-    } else {
-        // Fallback to downloading raw PNG
+    img.onerror = function() {
+        // Fallback to direct raw file download if canvas rendering fails
         const link = document.createElement('a');
         link.href = `${templateName}.png`;
         link.download = `Mau_Thiep_${templateName.charAt(0).toUpperCase() + templateName.slice(1)}_Goc.png`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        document.body.removeChild(card);
-    }
+        document.body.removeChild(alertOverlay);
+    };
 }
 
 async function printEmptyTemplate() {
